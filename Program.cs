@@ -1,7 +1,15 @@
+using APCM.Data;
+using APCM.Services.CommonService;
+using APCM.Services.UserService;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("APCM")));
+builder.Services.AddScoped<ICommonService, CommonService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();
 
