@@ -6,6 +6,7 @@ using APCM.Services.CommonService;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics.Eventing.Reader;
+using System.Security.Claims;
 
 namespace APCM.Services.UserService
 {
@@ -13,11 +14,13 @@ namespace APCM.Services.UserService
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly ICommonService _commonService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public UserService(ApplicationDbContext dbContext, ICommonService commonService)
+        public UserService(ApplicationDbContext dbContext, ICommonService commonService, IHttpContextAccessor httpContextAccessor)
         {
             _dbContext = dbContext;
             _commonService = commonService;
+            _httpContextAccessor=httpContextAccessor;
         }
 
         public async Task<Response> UserExists(string email)
@@ -66,7 +69,7 @@ namespace APCM.Services.UserService
             return response;
         }
 
-        public async Task<Response> ValidateUser(string email, string password)
+        public async Task<Response> LoginUser(string email, string password)
         {
             var response = new Response();
             try
@@ -75,6 +78,7 @@ namespace APCM.Services.UserService
                 if (user.Password == _commonService.DoHashing(password))
                 {
                     response.isSuccessful = true;
+                    var claims=new List<Claim> {new Claim(ClaimTypes.) }
                 }
                 else { 
                     response.isSuccessful = false;

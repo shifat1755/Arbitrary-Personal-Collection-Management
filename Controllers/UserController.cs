@@ -71,11 +71,12 @@ namespace APCM.Controllers
 
             else
             {
-                var response = await _userService.ValidateUser(data.Email, data.Password);
+                var response = await _userService.LoginUser(data.Email, data.Password);
                 if (response.isSuccessful == false) {
                     ModelState.AddModelError("err", "Wrong credentials");
                     return View();
                 }
+
 
                 return RedirectToAction("Index", "Home");
             }

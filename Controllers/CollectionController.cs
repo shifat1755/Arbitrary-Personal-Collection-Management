@@ -19,7 +19,15 @@ namespace APCM.Controllers
         [HttpPost]
         public IActionResult Create(CreateCollectionViewModel model)
         {
-            return View(model);
+            if (string.IsNullOrWhiteSpace(model.Title) || string.IsNullOrWhiteSpace(model.Category))
+            {
+                return View(model);
+            }
+            else
+            {
+                return View(model);
+            }
+
         }
     }
 }

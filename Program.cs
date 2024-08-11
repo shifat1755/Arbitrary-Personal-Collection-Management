@@ -8,6 +8,11 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("APCM")));
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddAuthentication("cookie").AddCookie("cookie", config =>
+{
+    config.Cookie.Name = "demo"; config.ExpireTimeSpan = TimeSpan.FromHours(3); config.LoginPath = "/User/Login";
+});
 builder.Services.AddScoped<ICommonService, CommonService>();
 builder.Services.AddScoped<IUserService, UserService>();
 
@@ -26,6 +31,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
