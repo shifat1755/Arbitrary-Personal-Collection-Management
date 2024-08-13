@@ -4,6 +4,7 @@ using APCM.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace APCM.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240812140654_Updated Bugs3")]
+    partial class UpdatedBugs3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -36,6 +39,111 @@ namespace APCM.Migrations
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("CustomBool1")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("CustomBool1Val")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("CustomBool2")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("CustomBool2Val")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("CustomBool3")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("CustomBool3Val")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("CustomBoolCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CustomDate1")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateOnly?>("CustomDate1Val")
+                        .HasColumnType("date");
+
+                    b.Property<string>("CustomDate2")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateOnly?>("CustomDate2Val")
+                        .HasColumnType("date");
+
+                    b.Property<string>("CustomDate3")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateOnly?>("CustomDate3Val")
+                        .HasColumnType("date");
+
+                    b.Property<int>("CustomDateCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CustomInt1")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("CustomInt1Val")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CustomInt2")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("CustomInt2Val")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CustomInt3")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("CustomInt3Val")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CustomIntCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CustomMultilineText1")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CustomMultilineText1Val")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CustomMultilineText2")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CustomMultilineText2Val")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CustomMultilineText3")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CustomMultilineText3Val")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("CustomMultilineTextCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CustomString1")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CustomString1Val")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CustomString2")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CustomString2Val")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CustomString3")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CustomString3Val")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("CustomStringCount")
+                        .HasColumnType("int");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -78,36 +186,6 @@ namespace APCM.Migrations
                     b.ToTable("Comments");
                 });
 
-            modelBuilder.Entity("APCM.Models.Entities.CustomField", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("CollectionId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Value")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CollectionId");
-
-                    b.ToTable("CustomField");
-                });
-
             modelBuilder.Entity("APCM.Models.Entities.HashTag", b =>
                 {
                     b.Property<int>("Id")
@@ -139,9 +217,6 @@ namespace APCM.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("CustomFieldId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
@@ -157,8 +232,6 @@ namespace APCM.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CollectionId");
-
-                    b.HasIndex("CustomFieldId");
 
                     b.ToTable("Items");
                 });
@@ -241,13 +314,6 @@ namespace APCM.Migrations
                     b.ToTable("HashTagItem");
                 });
 
-            modelBuilder.Entity("APCM.Models.Entities.CustomField", b =>
-                {
-                    b.HasOne("APCM.Models.Entities.Collection", null)
-                        .WithMany("CustomFields")
-                        .HasForeignKey("CollectionId");
-                });
-
             modelBuilder.Entity("APCM.Models.Entities.Item", b =>
                 {
                     b.HasOne("APCM.Models.Entities.Collection", null)
@@ -255,10 +321,6 @@ namespace APCM.Migrations
                         .HasForeignKey("CollectionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("APCM.Models.Entities.CustomField", null)
-                        .WithMany("Items")
-                        .HasForeignKey("CustomFieldId");
                 });
 
             modelBuilder.Entity("HashTagItem", b =>
@@ -277,13 +339,6 @@ namespace APCM.Migrations
                 });
 
             modelBuilder.Entity("APCM.Models.Entities.Collection", b =>
-                {
-                    b.Navigation("CustomFields");
-
-                    b.Navigation("Items");
-                });
-
-            modelBuilder.Entity("APCM.Models.Entities.CustomField", b =>
                 {
                     b.Navigation("Items");
                 });

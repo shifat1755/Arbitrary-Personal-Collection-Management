@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics.Eventing.Reader;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
 
 namespace APCM.Services.UserService
 {
@@ -75,10 +76,13 @@ namespace APCM.Services.UserService
             try
             {
                 var user = await _dbContext.Users.SingleOrDefaultAsync(u => u.Email == email);
-                if (user.Password == _commonService.DoHashing(password))
+                if (user?.Password == _commonService.DoHashing(password))
                 {
                     response.isSuccessful = true;
-                    var claims=new List<Claim> {new Claim(ClaimTypes.) }
+                    var claims = new List<Claim> { new Claim("Id", user.Id.ToString()), new Claim(ClaimTypes.Role, user.Role)};
+                    var claimsIdentity= new ClaimsIdentity(claims,"pwd");
+                    var cp=new ClaimsPrincipal(claimsIdentity);
+                    await _httpContextAccessor.HttpContext.SignInAsync(cp);
                 }
                 else { 
                     response.isSuccessful = false;
@@ -86,6 +90,22 @@ namespace APCM.Services.UserService
             }
             catch (Exception ex) { 
                 Console.WriteLine(ex.Message);
+            }
+            return response;
+        }
+        public async Task<Response> LogoutUser()
+        {
+            var response = new Response();
+            try
+            {
+                await _httpContextAccessor.HttpContext.SignOutAsync();
+                response.isSuccessful = true;
+
+            }
+            catch (Exception ex)
+            {
+                response.isSuccessful= false;
+                Console.WriteLine($"{ex.Message}");
             }
             return response;
         }

@@ -1,10 +1,7 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
-@model APCM.Models.Collection.CreateCollectionViewModel
-<form method="post">
+﻿@model APCM.Models.Collection.CreateCollectionViewModel
+@using System.Text.Json;
+
+<form method="post" id="@Model.Id">
     <div class="mt-3">
         <label class="form-label">Title</label>
         <input type="text" class="form-control" asp-for="Title" />
@@ -17,89 +14,95 @@
         <label class="form-label">Description</label>
         <textarea class="form-control" asp-for="Description" rows="4"></textarea>
     </div>
-    <div class="mt-3">
-        <div id="customIntField" class="mt-3"></div>
-        <button type="button" class="btn btn-secondary" onclick="addField('int')">Add int field</button>
+
+    <div id="customFieldsContainer" class="mt-3">
+        <!-- Existing fields will be rendered here -->
     </div>
-    <div class="mt-3">
-        <div id="customStringField" class="mt-3"></div>
-        <button type="button" class="btn btn-secondary" onclick="addField('string')">Add string field</button>
+
+    <div class="mt-3 d-flex align-items-center">
+        <select id="fieldTypeSelector" class="form-control">
+            <option value="">Select field type</option>
+            <option value="int">Int</option>
+            <option value="string">String</option>
+            <option value="multiline">Multiline</option>
+            <option value="bool">Bool</option>
+            <option value="date">Date</option>
+        </select>
+        <button id="addFieldButton" type="button" class="btn btn-secondary" style="margin-left: 5px;" onclick="addNewField()">Add</button>
     </div>
-    <div class="mt-3">
-        <div id="customMultileineTextField" class="mt-3"></div>
-        <button type="button" class="btn btn-secondary" onclick="addField('multileineText')">Add multiline text</button>
-    </div>
-    <div class="mt-3">
-        <div id="customBoolField" class="mt-3"></div>
-        <button type="button" class="btn btn-secondary" onclick="addField('bool')">Add boolean field</button>
-    </div>
-    <div class="mt-3">
-        <div id="customDateField" class="mt-3"></div>
-        <button type="button" class="btn btn-secondary" onclick="addField('date')">Add date field</button>
-    </div>
+
     <div class="mt-3 d-flex justify-content-center">
         <button type="submit" class="btn btn-primary btn-block" style="width: 200px;">Submit</button>
     </div>
 </form>
+
 <script>
-    let CustomIntFieldCount = @Model.CustomIntFieldCount;
-    let CustomStringFieldCount = @Model.CustomStringFieldCount;
-    let CustomMultilineTextFieldCount = @Model.CustomMultilineTextFieldCount;
-    let CustomBoolFieldCount = @Model.CustomBoolFieldCount;
-    let CustomDateFieldCount = @Model.CustomDateFieldCount;
+    // Use Json.Encode for proper JSON formatting
+    var customFields = @Html.Raw(Json.Serialize(Model.CustomFields));
 
-    function addField(type) {
-        let fieldHtml;
-        if (type === "int" && CustomIntFieldCount < 3) {
-            CustomIntFieldCount += 1;
-            fieldHtml = `<div class="mt-3">
-                <label class="form-label">Custom Int Field ${CustomIntFieldCount}</label>
-                    <input type="text" class="form-control" name="CustomInt${CustomIntFieldCount}" placeholder="Field Name" />
-                        <input type="int" class="form-control" name="CustomInt${CustomIntFieldCount}Val" placeholder="Int Value"/>
-
-            </div>`;
-            document.getElementById("customIntField").insertAdjacentHTML('beforeend', fieldHtml);
-        } else if (type === "string" && CustomStringFieldCount < 3) {
-            CustomStringFieldCount += 1;
-            fieldHtml = `<div class="mt-3">
-                <label class="form-label">Custom String Field ${CustomStringFieldCount}</label>
-                    <input type="text" class="form-control" name="CustomString${CustomStringFieldCount}" placeholder="Field Name"/>
-                            <input type="int" class="form-control" name="CustomInt${CustomIntFieldCount}Val" placeholder="String Value"/>
-
-            </div>`;
-            document.getElementById("customStringField").insertAdjacentHTML('beforeend', fieldHtml);
+    function addNewField() {
+        var type = document.getElementById("fieldTypeSelector").value;
+        if (type === "") {
+            alert("Please Select a type!");
+        } else {
+            const id = Math.floor(Math.random() * 1000000000).toString();
+            var htmlField = createField(id, type, "", "");
+            document.getElementById("customFieldsContainer").insertAdjacentHTML("beforeend", htmlField);
         }
-        else if (type === "multileineText" && CustomMultilineTextFieldCount < 3) {
-            CustomMultilineTextFieldCount += 1;
-            fieldHtml = `<div class="mt-3">
-                    <label class="form-label">Custom Multiline Text Field ${CustomMultilineTextFieldCount}</label>
-                        <input type="text" class="form-control" name="CustomMultilineText${CustomMultilineTextFieldCount}" placeholder="Field Name"/>
-                                <textarea class="form-control" name="CustomMultilineText${CustomIntFieldCount}Val"/>
+    }
 
-            </div>`;
-            document.getElementById("customMultileineTextField").insertAdjacentHTML('beforeend', fieldHtml);
-        }
-        else if (type === "bool" && CustomBoolFieldCount < 3) {
-            CustomBoolFieldCount += 1;
-            fieldHtml = `<div class="mt-3">
-                    <label class="form-label">Custom Boolean Field ${CustomBoolFieldCount}</label>
-            <div class="d-flex align-items-center">
-                <input type="text" class="form-control me-3" name="CustomBool${CustomBoolFieldCount}" placeholder="Field Name"/>
-                <input type="checkbox" class="form-check-input" style="transform: scale(2); margin-left: 5px;" name="CustomBool${CustomBoolFieldCount}Val"/>
-            </div>
+    function createField(fieldId, fieldType, fieldName, fieldValue) {
+        let fieldHtml = `<div id="${fieldId}" class="mt-3">`;
+        fieldHtml += `<label class="form-label">Custom ${fieldType} field</label>`;
 
-                    </div>`;
-            document.getElementById("customBoolField").insertAdjacentHTML('beforeend', fieldHtml);
+        if (fieldType == "bool") {
+            fieldHtml += `<div class="d-flex align-items-center">`;
         }
-        else if (type === "date" && CustomDateFieldCount < 3) {
-            CustomDateFieldCount += 1;
-            fieldHtml = `<div class="mt-3">
-            <label class="form-label">Custom Date Field ${CustomDateFieldCount}</label>
-                <input type="text" class="form-control" name="CustomDate${CustomDateFieldCount}" placeholder="Field Name"/>
-                            <input type="date" class="form-control" name="CustomDate${CustomDateFieldCount}Val" placeholder="String Value"/>
 
-            </div>`;
-            document.getElementById("customDateField").insertAdjacentHTML('beforeend', fieldHtml);
+        fieldHtml += `<input type="hidden" name="CustomFields.Index" value="${fieldId}" />`;
+        fieldHtml += `<input type="text" class="form-control" name="CustomFields[${fieldId}].Name" placeholder="Field name" value="${fieldName}" />`;
+
+        switch (fieldType) {
+            case "int":
+                fieldHtml += `<input type="number" class="form-control" name="CustomFields[${fieldId}].Value" placeholder="Int value" value="${fieldValue}" />`;
+                break;
+            case "string":
+                fieldHtml += `<input type="text" class="form-control" name="CustomFields[${fieldId}].Value" placeholder="String value" value="${fieldValue}" />`;
+                break;
+            case "multiline":
+                fieldHtml += `<textarea class="form-control" name="CustomFields[${fieldId}].Value" rows="2" placeholder="Multiline text here">${fieldValue}</textarea>`;
+                break;
+            case "bool":
+                const checked = fieldValue === "true" ? "checked" : "";
+                fieldHtml += `<input type="checkbox" class="form-check-input" style="transform: scale(1.8); margin-left: 12px; margin-bottom:4px" name="CustomFields[${fieldId}].Value" value="true" ${checked} />`;
+                fieldHtml += `</div>`;
+                break;
+            case "date":
+                fieldHtml += `<input type="date" class="form-control" name="CustomFields[${fieldId}].Value" value="${fieldValue}" />`;
+                break;
         }
+
+        fieldHtml += `<input type="hidden" name="CustomFields[${fieldId}].Type" value="${fieldType}" />`; // Type hidden field
+        fieldHtml += `<button type="button" class="btn btn-danger mt-1" onclick="removeField('${fieldId}')">Remove</button>`;
+        fieldHtml += `</div>`;
+        return fieldHtml;
+    }
+
+    function removeField(fieldId) {
+        const fieldElement = document.getElementById(fieldId);
+        if (fieldElement) {
+            fieldElement.remove();
+        }
+    }
+
+    function renderExistingCustomFields() {
+        customFields.forEach(field => {
+            var htmlField = createField(field.Id, field.Type, field.Name, field.Value);
+            document.getElementById("customFieldsContainer").insertAdjacentHTML("beforeend", htmlField);
+        });
+    }
+
+    window.onload = function () {
+        renderExistingCustomFields();
     }
 </script>

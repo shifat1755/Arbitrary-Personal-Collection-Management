@@ -1,15 +1,17 @@
 ﻿using APCM.Models.Collection;
+using APCM.Services.CollectionService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace APCM.Controllers
 {
     public class CollectionController : Controller
     {
-        public IActionResult Index()
-        {
-            return View();
+        private readonly ICollectionService _collectionService;
+        public CollectionController(ICollectionService collectionService) { 
+            _collectionService=collectionService;
         }
-
+        [Authorize(Roles = "User,Admin")]
         [HttpGet]
         public IActionResult Create()
         {
@@ -17,7 +19,7 @@ namespace APCM.Controllers
             return View(model);
         }
         [HttpPost]
-        public IActionResult Create(CreateCollectionViewModel model)
+        public async Task<IActionResult> Create(CreateCollectionViewModel model)
         {
             if (string.IsNullOrWhiteSpace(model.Title) || string.IsNullOrWhiteSpace(model.Category))
             {
@@ -25,6 +27,8 @@ namespace APCM.Controllers
             }
             else
             {
+                model.UserId = int.Parse(User?.FindFirst("Id").Value);
+                var response = await _collectionService.CreateCollection(model);
                 return View(model);
             }
 

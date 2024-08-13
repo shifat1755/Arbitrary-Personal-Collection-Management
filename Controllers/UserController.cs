@@ -1,5 +1,6 @@
 ﻿using APCM.Models.User;
 using APCM.Services.UserService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Org.BouncyCastle.Security;
 
@@ -8,6 +9,7 @@ namespace APCM.Controllers
     public class UserController : Controller
     {
         private readonly IUserService _userService;
+
         public UserController(IUserService userService)
         {
             _userService = userService;
@@ -80,6 +82,12 @@ namespace APCM.Controllers
 
                 return RedirectToAction("Index", "Home");
             }
+        }
+        public async Task<IActionResult> Logout()
+        {
+            var response=await _userService.LogoutUser();
+
+            return RedirectToAction("Index", "Home");
         }
     }
 }

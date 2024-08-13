@@ -1,4 +1,5 @@
 using APCM.Data;
+using APCM.Services.CollectionService;
 using APCM.Services.CommonService;
 using APCM.Services.UserService;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +16,8 @@ builder.Services.AddAuthentication("cookie").AddCookie("cookie", config =>
 });
 builder.Services.AddScoped<ICommonService, CommonService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ICollectionService, CollectionService>();
+
 
 var app = builder.Build();
 
