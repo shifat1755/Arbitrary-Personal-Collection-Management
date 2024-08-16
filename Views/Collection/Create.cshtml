@@ -1,7 +1,10 @@
 ﻿@model APCM.Models.Collection.CreateCollectionViewModel
 @using System.Text.Json;
 
-<form method="post" id="@Model.Id">
+@{
+    var actionName = Model.isEdit ? "Edit" : "Create";
+}
+<form asp-action="@actionName" method="post" id="@Model.Id">
     <div class="mt-3">
         <label class="form-label">Title</label>
         <input type="text" class="form-control" asp-for="Title" />
@@ -16,7 +19,6 @@
     </div>
 
     <div id="customFieldsContainer" class="mt-3">
-        <!-- Existing fields will be rendered here -->
     </div>
 
     <div class="mt-3 d-flex align-items-center">
@@ -37,9 +39,7 @@
 </form>
 
 <script>
-    // Use Json.Encode for proper JSON formatting
-    var customFields = @Html.Raw(Json.Serialize(Model.CustomFields));
-
+    var customFields = @Html.Raw(Json.Serialize(Model.CustomFields ?? new List<APCM.Models.Collection.CustomFieldViewModel>()));
     function addNewField() {
         var type = document.getElementById("fieldTypeSelector").value;
         if (type === "") {
@@ -51,42 +51,18 @@
         }
     }
 
-    function createField(fieldId, fieldType, fieldName, fieldValue) {
+    function createField(fieldId, fieldType, fieldName) {
         let fieldHtml = `<div id="${fieldId}" class="mt-3">`;
         fieldHtml += `<label class="form-label">Custom ${fieldType} field</label>`;
-
-        if (fieldType == "bool") {
-            fieldHtml += `<div class="d-flex align-items-center">`;
-        }
-
         fieldHtml += `<input type="hidden" name="CustomFields.Index" value="${fieldId}" />`;
-        fieldHtml += `<input type="text" class="form-control" name="CustomFields[${fieldId}].Name" placeholder="Field name" value="${fieldName}" />`;
-
-        switch (fieldType) {
-            case "int":
-                fieldHtml += `<input type="number" class="form-control" name="CustomFields[${fieldId}].Value" placeholder="Int value" value="${fieldValue}" />`;
-                break;
-            case "string":
-                fieldHtml += `<input type="text" class="form-control" name="CustomFields[${fieldId}].Value" placeholder="String value" value="${fieldValue}" />`;
-                break;
-            case "multiline":
-                fieldHtml += `<textarea class="form-control" name="CustomFields[${fieldId}].Value" rows="2" placeholder="Multiline text here">${fieldValue}</textarea>`;
-                break;
-            case "bool":
-                const checked = fieldValue === "true" ? "checked" : "";
-                fieldHtml += `<input type="checkbox" class="form-check-input" style="transform: scale(1.8); margin-left: 12px; margin-bottom:4px" name="CustomFields[${fieldId}].Value" value="true" ${checked} />`;
-                fieldHtml += `</div>`;
-                break;
-            case "date":
-                fieldHtml += `<input type="date" class="form-control" name="CustomFields[${fieldId}].Value" value="${fieldValue}" />`;
-                break;
-        }
-
-        fieldHtml += `<input type="hidden" name="CustomFields[${fieldId}].Type" value="${fieldType}" />`; // Type hidden field
+        fieldHtml += `<input type="hidden" name="CustomFields[${fieldId}].Type" value="${fieldType}" />`;
+        fieldHtml += `<input type="text" class="form-control mb-1" name="CustomFields[${fieldId}].Name" placeholder="Field name" value="${fieldName}" />`;
         fieldHtml += `<button type="button" class="btn btn-danger mt-1" onclick="removeField('${fieldId}')">Remove</button>`;
         fieldHtml += `</div>`;
+
         return fieldHtml;
     }
+
 
     function removeField(fieldId) {
         const fieldElement = document.getElementById(fieldId);
@@ -97,7 +73,7 @@
 
     function renderExistingCustomFields() {
         customFields.forEach(field => {
-            var htmlField = createField(field.Id, field.Type, field.Name, field.Value);
+            var htmlField = createField(field.id, field.type, field.name);
             document.getElementById("customFieldsContainer").insertAdjacentHTML("beforeend", htmlField);
         });
     }
@@ -106,3 +82,48 @@
         renderExistingCustomFields();
     }
 </script>
+
+
+@*  function createField(fieldId, fieldType, fieldName, fieldValue) {
+        let fieldHtml = `<div id="${fieldId}" class="mt-3">
+    `;
+    fieldHtml += `<label class="form-label">Custom ${fieldType} field</label>`;
+    fieldHtml += `<input type="hidden" name="CustomFields.Index" value="${fieldId}" />`;
+    fieldHtml += `<input type="hidden" name="CustomFields[${fieldId}].Type" value="${fieldType}" />`;
+
+    if (fieldType == "bool") {
+    fieldHtml += `<div class="d-flex align-items-center">
+        `;
+        }
+
+        fieldHtml += `<input type="text" class="form-control mb-1" name="CustomFields[${fieldId}].Name" placeholder="Field name" value="${fieldName}" />`;
+
+        switch (fieldType) {
+        case "int":
+        fieldValue = fieldValue === "" ? "" : parseInt(fieldValue, 10);
+        fieldHtml += `<input type="number" class="form-control" name="CustomFields[${fieldId}].Value" placeholder="Int value" value="${fieldValue}" />`;
+        break;
+        case "string":
+        fieldHtml += `<input type="text" class="form-control" name="CustomFields[${fieldId}].Value" placeholder="String value" value="${fieldValue}" />`;
+        break;
+        case "multiline":
+        fieldHtml += `<textarea class="form-control" name="CustomFields[${fieldId}].Value" rows="2" placeholder="Multiline text here">${fieldValue}</textarea>`;
+        break;
+        case "bool":
+        const checked = fieldValue === "true" ? "checked" : "";
+        fieldHtml += `<input type="hidden" name="CustomFields[${fieldId}].Value" value="false">`;
+        fieldHtml += `<input type="checkbox" class="form-check-input" style="transform: scale(1.8); margin-left: 12px; margin-bottom:6px" name="CustomFields[${fieldId}].Value" value="true" ${checked} />`;
+        fieldHtml += `
+    </div>`;
+    break;
+    case "date":
+    fieldHtml += `<input type="date" class="form-control" name="CustomFields[${fieldId}].Value" value="${fieldValue}" />`;
+    break;
+    }
+
+    fieldHtml += `<button type="button" class="btn btn-danger mt-1" onclick="removeField('${fieldId}')">Remove</button>`;
+    fieldHtml += `
+</div>`;
+
+        return fieldHtml;
+    } *@

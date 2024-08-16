@@ -4,6 +4,7 @@ using APCM.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace APCM.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240814194313_Fix9")]
+    partial class Fix9
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -38,9 +41,6 @@ namespace APCM.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ItemCount")
-                        .HasColumnType("int");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -77,26 +77,6 @@ namespace APCM.Migrations
                     b.ToTable("Comments");
                 });
 
-            modelBuilder.Entity("APCM.Models.Entities.CustomFIeldValue", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("CustomFieldId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Value")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CustomFieldId");
-
-                    b.ToTable("CustomFIeldValues");
-                });
-
             modelBuilder.Entity("APCM.Models.Entities.CustomField", b =>
                 {
                     b.Property<Guid>("Id")
@@ -114,11 +94,15 @@ namespace APCM.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CollectionId");
 
-                    b.ToTable("CustomFields");
+                    b.ToTable("CustomField");
                 });
 
             modelBuilder.Entity("APCM.Models.Entities.HashTag", b =>
@@ -148,6 +132,9 @@ namespace APCM.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid?>("CustomFieldId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
@@ -163,6 +150,8 @@ namespace APCM.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CollectionId");
+
+                    b.HasIndex("CustomFieldId");
 
                     b.ToTable("Items");
                 });
@@ -241,17 +230,6 @@ namespace APCM.Migrations
                     b.ToTable("HashTagItem");
                 });
 
-            modelBuilder.Entity("APCM.Models.Entities.CustomFIeldValue", b =>
-                {
-                    b.HasOne("APCM.Models.Entities.CustomField", "CustomField")
-                        .WithMany()
-                        .HasForeignKey("CustomFieldId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("CustomField");
-                });
-
             modelBuilder.Entity("APCM.Models.Entities.CustomField", b =>
                 {
                     b.HasOne("APCM.Models.Entities.Collection", null)
@@ -266,6 +244,10 @@ namespace APCM.Migrations
                         .HasForeignKey("CollectionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("APCM.Models.Entities.CustomField", null)
+                        .WithMany("Items")
+                        .HasForeignKey("CustomFieldId");
                 });
 
             modelBuilder.Entity("HashTagItem", b =>
@@ -287,6 +269,11 @@ namespace APCM.Migrations
                 {
                     b.Navigation("CustomFields");
 
+                    b.Navigation("Items");
+                });
+
+            modelBuilder.Entity("APCM.Models.Entities.CustomField", b =>
+                {
                     b.Navigation("Items");
                 });
 #pragma warning restore 612, 618

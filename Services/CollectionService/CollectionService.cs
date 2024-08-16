@@ -14,72 +14,60 @@ namespace APCM.Services.CollectionService
         {
             _dbContext = dbContext;
         }
-        public async Task<Response> CreateCollection(CreateCollectionViewModel data)
+        public async Task<Response<object>> CreateCollection(CreateCollectionViewModel data)
         {
-            var response=new Response();
-/*            try
+            var response=new Response<object>();
+            try
             {
-                var collection = new Collection()
+                var collection = new Collection();
+                collection = mapCollectionFields(data, collection);
+                collection.CreatedAt=DateTime.Now;
+                foreach(var item in data.CustomFields)
                 {
-                    Title = data.Title,
-                    Description = data?.Description,
-                    UserId = data.UserId,
-                    Category = data?.Category,
-                };
-                int maxFieldCount = 3;
-                collection = addCustomFields(data, collection, "CustomInt", maxFieldCount);
-                collection = addCustomFields(data, collection, "CustomString", maxFieldCount);
-                collection = addCustomFields(data, collection, "CustomMultilineText", maxFieldCount);
-                collection = addCustomFields(data, collection, "CustomDate", maxFieldCount);
-                collection = addCustomFields(data, collection, "CustomBool", maxFieldCount);
+                    var customItem = new CustomField()
+                    {
+                        Name = item.Name,
+                        Type = item.Type,
+                    };
+                    /*customItem=mapCustomFields(customItem, item);*/
+                    await _dbContext.AddAsync(customItem);
+                    collection.CustomFields.Add(customItem);
+                }
 
                 await _dbContext.Collections.AddAsync(collection);
                 await _dbContext.SaveChangesAsync();
                 response.isSuccessful = true;
             }
-            catch (Exception ex) { 
+            catch (Exception ex)
+            {
                 Console.WriteLine($"===============>{ex.ToString()}");
                 response.isSuccessful = false;
-            }*/
-            return response;
-        }
-/*        public Collection addCustomFields(CreateCollectionViewModel model, Collection collection, string typeToAdd,int num)
-        {
-            int count = 0;
-
-            for (int i=1; i<=num; i++)
-            {
-                string fieldKey=$"{typeToAdd}{i}";
-                string valKey = $"{typeToAdd}{i}Val";
-                var modelFieldKey =model.GetType().GetProperty(fieldKey);
-                var modelFieldValKey = model.GetType().GetProperty(valKey);
-                var modelFieldValue = modelFieldKey.GetValue(model);
-                var modelFieldValValue = modelFieldValKey.GetValue(model);
-
-                var colFieldKey = collection.GetType().GetProperty(fieldKey);
-                var colFieldValKey = collection.GetType().GetProperty(valKey);
-
-                colFieldKey.SetValue(collection,modelFieldValue);
-                colFieldValKey.SetValue(collection, modelFieldValValue);
-
-                if (modelFieldValue != null)
-                {
-                    count++;
-                }
             }
-            string colCount = $"{typeToAdd}Count";
-            var colFieldCount=collection.GetType().GetProperty(colCount);
-            colFieldCount.SetValue(collection,count);
-            return collection;
-        }*/
-        public async Task<Response> UpdateCollection(CreateCollectionViewModel data)
-        {
-            var response = new Response();
             return response;
         }
-        public async Task<Response> DeleteCollection(int id)
+        public Collection mapCollectionFields(CreateCollectionViewModel model,Collection collection)
         {
-            var response = new Response();
+            collection.Title = model.Title;
+            collection.Category=model.Category;
+            collection.Description = model.Description;
+            collection.UserId = model.UserId;
+            return collection;
+        }
+/*        public CustomField mapCustomFields(CustomField customField,CustomFieldViewModel model) {
+            customField.Type = model.Type;
+            customField.Name= model.Name;
+            customField.Value = model.Value;
+            return customField;
+
+        }*/
+        public async Task<Response<object>> UpdateCollection(CreateCollectionViewModel data)
+        {
+            var response=new Response<object>();
+            return response;
+        }
+        public async Task<Response<object>> DeleteCollection(int id)
+        {
+            var response = new Response<object>();
             return response;
         }
     }

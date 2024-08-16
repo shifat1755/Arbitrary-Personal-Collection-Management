@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace APCM.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240813203352_Updated Bugs4")]
-    partial class UpdatedBugs4
+    [Migration("20240816193145_Update-9")]
+    partial class Update9
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,29 +27,30 @@ namespace APCM.Migrations
 
             modelBuilder.Entity("APCM.Models.Entities.Collection", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Category")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("ItemCount")
+                        .HasColumnType("int");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -58,11 +59,9 @@ namespace APCM.Migrations
 
             modelBuilder.Entity("APCM.Models.Entities.Comment", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
@@ -70,27 +69,45 @@ namespace APCM.Migrations
                     b.Property<string>("Data")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ItemId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("ItemId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
                     b.ToTable("Comments");
                 });
 
+            modelBuilder.Entity("APCM.Models.Entities.CustomFIeldValue", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CustomFieldId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomFieldId");
+
+                    b.ToTable("CustomFIeldValues");
+                });
+
             modelBuilder.Entity("APCM.Models.Entities.CustomField", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("CollectionId")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("CollectionId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -100,24 +117,18 @@ namespace APCM.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Value")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CollectionId");
 
-                    b.ToTable("CustomField");
+                    b.ToTable("CustomFields");
                 });
 
             modelBuilder.Entity("APCM.Models.Entities.HashTag", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Tag")
                         .IsRequired()
@@ -130,20 +141,15 @@ namespace APCM.Migrations
 
             modelBuilder.Entity("APCM.Models.Entities.Item", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("CollectionId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("CollectionId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<int?>("CustomFieldId")
-                        .HasColumnType("int");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
@@ -154,31 +160,27 @@ namespace APCM.Migrations
                     b.Property<string>("Topic")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CollectionId");
-
-                    b.HasIndex("CustomFieldId");
 
                     b.ToTable("Items");
                 });
 
             modelBuilder.Entity("APCM.Models.Entities.Like", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<Guid>("ItemId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("ItemId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -187,11 +189,9 @@ namespace APCM.Migrations
 
             modelBuilder.Entity("APCM.Models.Entities.User", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -231,17 +231,28 @@ namespace APCM.Migrations
 
             modelBuilder.Entity("HashTagItem", b =>
                 {
-                    b.Property<int>("HashTagsId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("HashTagsId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("itemsId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("itemsId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("HashTagsId", "itemsId");
 
                     b.HasIndex("itemsId");
 
                     b.ToTable("HashTagItem");
+                });
+
+            modelBuilder.Entity("APCM.Models.Entities.CustomFIeldValue", b =>
+                {
+                    b.HasOne("APCM.Models.Entities.CustomField", "CustomField")
+                        .WithMany()
+                        .HasForeignKey("CustomFieldId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CustomField");
                 });
 
             modelBuilder.Entity("APCM.Models.Entities.CustomField", b =>
@@ -258,10 +269,6 @@ namespace APCM.Migrations
                         .HasForeignKey("CollectionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("APCM.Models.Entities.CustomField", null)
-                        .WithMany("Items")
-                        .HasForeignKey("CustomFieldId");
                 });
 
             modelBuilder.Entity("HashTagItem", b =>
@@ -283,11 +290,6 @@ namespace APCM.Migrations
                 {
                     b.Navigation("CustomFields");
 
-                    b.Navigation("Items");
-                });
-
-            modelBuilder.Entity("APCM.Models.Entities.CustomField", b =>
-                {
                     b.Navigation("Items");
                 });
 #pragma warning restore 612, 618

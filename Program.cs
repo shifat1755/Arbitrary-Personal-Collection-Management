@@ -1,6 +1,7 @@
 using APCM.Data;
 using APCM.Services.CollectionService;
 using APCM.Services.CommonService;
+using APCM.Services.HomeService;
 using APCM.Services.UserService;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,11 +13,14 @@ builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlSer
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddAuthentication("cookie").AddCookie("cookie", config =>
 {
-    config.Cookie.Name = "demo"; config.ExpireTimeSpan = TimeSpan.FromHours(3); config.LoginPath = "/User/Login";
+    config.Cookie.Name = "demo"; config.ExpireTimeSpan = TimeSpan.FromDays(7); config.LoginPath = "/User/Login";
 });
 builder.Services.AddScoped<ICommonService, CommonService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ICollectionService, CollectionService>();
+builder.Services.AddScoped<IHomeService, HomeService>();
+
+
 
 
 var app = builder.Build();

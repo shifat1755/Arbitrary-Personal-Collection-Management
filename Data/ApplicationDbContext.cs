@@ -13,6 +13,8 @@ namespace APCM.Data
         public DbSet<Like> Likes { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Collection> Collections { get; set; }
+        public DbSet<CustomField> CustomFields { get; set; }
+        public DbSet<CustomFIeldValue>CustomFIeldValues { get; set; }
         public DbSet<Item> Items { get; set; }
         public DbSet<HashTag> hashTags { get; set; }
     }

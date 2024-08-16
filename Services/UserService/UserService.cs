@@ -24,9 +24,9 @@ namespace APCM.Services.UserService
             _httpContextAccessor=httpContextAccessor;
         }
 
-        public async Task<Response> UserExists(string email)
+        public async Task<Response<object>> UserExists(string email)
         {
-            var response = new Response();
+            var response = new Response<object>();
             var isExists = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == email);
             if (isExists == null)
             {
@@ -38,10 +38,10 @@ namespace APCM.Services.UserService
             }
             return response;
         }
-        public async Task<Response> DoSignUp(SignUpUserViewModel data)
+        public async Task<Response<object>> DoSignUp(SignUpUserViewModel data)
         {
 
-            var response = new Response();
+            var response = new Response<object>();
             try
             {
                 var user = new User
@@ -70,9 +70,9 @@ namespace APCM.Services.UserService
             return response;
         }
 
-        public async Task<Response> LoginUser(string email, string password)
+        public async Task<Response<object>> LoginUser(string email, string password)
         {
-            var response = new Response();
+            var response = new Response<object>();
             try
             {
                 var user = await _dbContext.Users.SingleOrDefaultAsync(u => u.Email == email);
@@ -93,9 +93,9 @@ namespace APCM.Services.UserService
             }
             return response;
         }
-        public async Task<Response> LogoutUser()
+        public async Task<Response<object>> LogoutUser()
         {
-            var response = new Response();
+            var response = new Response<object>();
             try
             {
                 await _httpContextAccessor.HttpContext.SignOutAsync();

@@ -1,8 +1,80 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        /* The heart of the matter */
+        .horizontal-scrollable {
+            overflow-x: auto;
+            white-space: nowrap;
+        }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+            .horizontal-scrollable .scroll-item {
+                display: inline-block;
+                width: 150px;
+                height: 150px;
+                margin-right: 10px;
+            }
+
+        .scroll-item {
+            color: black;
+            padding: 10px;
+            background-color: #F5F5F5;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0.2, 0.2, 0.2, 0.2);
+        }
+
+    </style>
+</head>
+<body>
+    <div class="mt-4">
+        <h5>Top 5 Largest</h4>
+        <hr />
+        <div id="largest" class=" container-fluid horizontal-scrollable">
+        </div>
+    </div>
+    <div class="mt-4">
+        <h5>Recently added collections</h5>
+        <hr />
+        <div id="recent" class="container-fluid horizontal-scrollable">
+        </div>
+
+    </div>
+</body>
+</html>
+
+<script>
+    var recentCollections = @Html.Raw(Json.Serialize(Model.RecentCollections ?? new List<APCM.Models.Entities.Collection>()));
+    var largestCollections = @Html.Raw(Json.Serialize(Model.LargestCollections ?? new List<APCM.Models.Entities.Collection>()));
+
+    function createField(item) {
+        var htmlField = `
+                <div class="scroll-item" id="${item.id}" style="overflow: hidden; text-overflow: ellipsis;" onclick="alert('${item.title}');">
+                    <div>
+                        <p class="mb-0" style="font-size:13px;"><strong>${item.title}</strong></p>
+                        <p class="mt-0 fst-italic" style="font-size:11px;"><strong>${item.category}</strong></p>
+                        <p class="mt-0 mb-2" style="font-size:12px;">Items: ${item.items.length}</p>
+                            <p class="flex-wrap mt-0" style="font-size:12px;  white-space: normal;">About: ${item.description}</p>
+                    </div>
+                </div>`;
+        return htmlField;
+    }
+
+    function renderRecentCollections() {
+        recentCollections.forEach(item => {
+            var htmlField = createField(item);
+            document.getElementById("recent").insertAdjacentHTML('beforeend', htmlField);
+        });
+    }
+
+    function renderLargestCollections() {
+        largestCollections.forEach(item => {
+            var htmlField = createField(item);
+            document.getElementById("largest").insertAdjacentHTML('beforeend', htmlField);
+        });
+    }
+
+    window.onload = function () {
+        renderRecentCollections();
+        renderLargestCollections();
+    }
+</script>
