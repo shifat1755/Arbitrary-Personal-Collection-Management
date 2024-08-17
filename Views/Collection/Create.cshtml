@@ -46,7 +46,7 @@
             alert("Please Select a type!");
         } else {
             const id = Math.floor(Math.random() * 1000000000).toString();
-            var htmlField = createField(id, type, "", "");
+            var htmlField = createField(id, type, "");
             document.getElementById("customFieldsContainer").insertAdjacentHTML("beforeend", htmlField);
         }
     }

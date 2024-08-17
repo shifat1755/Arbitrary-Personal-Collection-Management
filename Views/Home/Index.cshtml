@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
     <style>
-        /* The heart of the matter */
         .horizontal-scrollable {
             overflow-x: auto;
             white-space: nowrap;
@@ -27,7 +26,7 @@
 </head>
 <body>
     <div class="mt-4">
-        <h5>Top 5 Largest</h4>
+        <h5>Top 5 Largest</h5>
         <hr />
         <div id="largest" class=" container-fluid horizontal-scrollable">
         </div>
@@ -48,7 +47,7 @@
 
     function createField(item) {
         var htmlField = `
-                <div class="scroll-item" id="${item.id}" style="overflow: hidden; text-overflow: ellipsis;" onclick="alert('${item.title}');">
+                <div class="scroll-item" id="${item.id}" style="overflow: hidden; text-overflow: ellipsis;" onclick="window.location.href='/Collection/Details/${item.id}'">
                     <div>
                         <p class="mb-0" style="font-size:13px;"><strong>${item.title}</strong></p>
                         <p class="mt-0 fst-italic" style="font-size:11px;"><strong>${item.category}</strong></p>

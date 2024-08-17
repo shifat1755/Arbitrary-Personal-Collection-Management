@@ -16,6 +16,21 @@ namespace APCM.Controllers
             _collectionService=collectionService;
             _dbContext=dbContext;
         }
+
+        public async Task<IActionResult> Details(Guid id)
+        {
+            var data = new CollectionDetailsViewModel()
+            {
+                Collection = (await _collectionService.GetCollection(id)).Data,
+            };
+            data.Items=await _dbContext.Items
+                .Where(x => x.CollectionId == id)
+                .Include(c=>c.CustomFieldValues)
+                    .ThenInclude(CF=>CF.CustomField)
+                .ToListAsync();
+            return View(data);
+        }
+
         [Authorize(Roles = "User,Admin")]
         [HttpGet]
         public IActionResult Create()
@@ -41,8 +56,7 @@ namespace APCM.Controllers
         [HttpGet]
         public async Task<IActionResult>Edit(Guid id)
         {
-            var ss= await _dbContext.Collections.FirstOrDefaultAsync(c=>c.Title== "kljdkled");
-            var collection = await _dbContext.Collections.Include(c => c.CustomFields).FirstOrDefaultAsync(c => c.Id ==ss.Id);
+            var collection = await _dbContext.Collections.Include(c => c.CustomFields).FirstOrDefaultAsync(c => c.Id ==id);
             var data = new CreateCollectionViewModel()
             {
                 Id = collection.Id,
