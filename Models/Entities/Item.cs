@@ -12,7 +12,9 @@ namespace APCM.Models.Entities
         public Collection Collection { get; set; }
         public string? Title { get; set; }
         public ICollection<CustomFieldValue>CustomFieldValues { get; set; }=new List<CustomFieldValue>();
-        public ICollection<HashTag> HashTags { get; set; } = new List<HashTag>();
+        public ICollection<Tag> Tags { get; set; } = new List<Tag>();
+        public ICollection<Like> Likes { get; set; }= new List<Like>();
+        public ICollection<Comment> Comments { get; set; } = new List<Comment>();
         public DateTime CreatedDate { get; set; }
     }
 }

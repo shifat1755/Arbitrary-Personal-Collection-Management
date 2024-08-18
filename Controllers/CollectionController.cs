@@ -26,7 +26,7 @@ namespace APCM.Controllers
             data.Items=await _dbContext.Items
                 .Where(x => x.CollectionId == id)
                 .Include(c=>c.CustomFieldValues)
-                    .ThenInclude(CF=>CF.CustomField)
+
                 .ToListAsync();
             return View(data);
         }
@@ -64,10 +64,10 @@ namespace APCM.Controllers
                 Title=collection.Title,
                 Category=collection.Category,
                 Description=collection.Description,
-                CustomFields=collection.CustomFields.Select(cf=>new CustomFieldViewModel{
-                Id=cf.Id,
-                Type=cf.Type,
-                Name=cf.Name,
+                CustomFields=collection.CustomFields?.Select(cf=>new CustomFieldViewModel{
+                    Id=cf.Id,
+                    Type = cf.Type,
+                    Name=cf.Name,
                 }).ToList(),
                 isEdit=true,
             };
@@ -75,9 +75,15 @@ namespace APCM.Controllers
             return View("Create",data);
         }
         [HttpPost]
-        public IActionResult Edit(CreateCollectionViewModel model)
+        public async Task<IActionResult> Edit(CreateCollectionViewModel model)
         {
+            var response=await _collectionService.EditCollection(model);
+            if (response.isSuccessful == true)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             return View("Create", model);
+
         }
     }
 }

@@ -4,6 +4,7 @@ using APCM.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace APCM.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240818171717_Db2")]
+    partial class Db2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -73,8 +76,6 @@ namespace APCM.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ItemId");
-
                     b.ToTable("Comments");
                 });
 
@@ -130,6 +131,21 @@ namespace APCM.Migrations
                     b.ToTable("CustomFieldValues");
                 });
 
+            modelBuilder.Entity("APCM.Models.Entities.HashTag", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Tag")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("hashTags");
+                });
+
             modelBuilder.Entity("APCM.Models.Entities.Item", b =>
                 {
                     b.Property<Guid>("Id")
@@ -169,24 +185,7 @@ namespace APCM.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ItemId");
-
                     b.ToTable("Likes");
-                });
-
-            modelBuilder.Entity("APCM.Models.Entities.Tag", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("hashTags");
                 });
 
             modelBuilder.Entity("APCM.Models.Entities.User", b =>
@@ -231,19 +230,19 @@ namespace APCM.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("ItemTag", b =>
+            modelBuilder.Entity("HashTagItem", b =>
                 {
-                    b.Property<Guid>("TagsId")
+                    b.Property<Guid>("HashTagsId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("itemsId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("TagsId", "itemsId");
+                    b.HasKey("HashTagsId", "itemsId");
 
                     b.HasIndex("itemsId");
 
-                    b.ToTable("ItemTag");
+                    b.ToTable("HashTagItem");
                 });
 
             modelBuilder.Entity("APCM.Models.Entities.Collection", b =>
@@ -255,17 +254,6 @@ namespace APCM.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("APCM.Models.Entities.Comment", b =>
-                {
-                    b.HasOne("APCM.Models.Entities.Item", "Item")
-                        .WithMany("Comments")
-                        .HasForeignKey("ItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Item");
                 });
 
             modelBuilder.Entity("APCM.Models.Entities.CustomField", b =>
@@ -301,22 +289,11 @@ namespace APCM.Migrations
                     b.Navigation("Collection");
                 });
 
-            modelBuilder.Entity("APCM.Models.Entities.Like", b =>
+            modelBuilder.Entity("HashTagItem", b =>
                 {
-                    b.HasOne("APCM.Models.Entities.Item", "Item")
-                        .WithMany("Likes")
-                        .HasForeignKey("ItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Item");
-                });
-
-            modelBuilder.Entity("ItemTag", b =>
-                {
-                    b.HasOne("APCM.Models.Entities.Tag", null)
+                    b.HasOne("APCM.Models.Entities.HashTag", null)
                         .WithMany()
-                        .HasForeignKey("TagsId")
+                        .HasForeignKey("HashTagsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -336,11 +313,7 @@ namespace APCM.Migrations
 
             modelBuilder.Entity("APCM.Models.Entities.Item", b =>
                 {
-                    b.Navigation("Comments");
-
                     b.Navigation("CustomFieldValues");
-
-                    b.Navigation("Likes");
                 });
 
             modelBuilder.Entity("APCM.Models.Entities.User", b =>

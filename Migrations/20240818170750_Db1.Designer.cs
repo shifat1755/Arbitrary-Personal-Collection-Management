@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace APCM.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240817083216_Db-Update9")]
-    partial class DbUpdate9
+    [Migration("20240818170750_Db1")]
+    partial class Db1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -54,6 +54,8 @@ namespace APCM.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("Collections");
                 });
 
@@ -86,7 +88,7 @@ namespace APCM.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("CollectionId")
+                    b.Property<Guid>("CollectionId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
@@ -110,11 +112,16 @@ namespace APCM.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CustomFieldId")
+                    b.Property<string>("FieldName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("ItemId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("ItemId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Value")
                         .IsRequired()
@@ -122,11 +129,9 @@ namespace APCM.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CustomFieldId");
-
                     b.HasIndex("ItemId");
 
-                    b.ToTable("CustomFIeldValues");
+                    b.ToTable("CustomFieldValues");
                 });
 
             modelBuilder.Entity("APCM.Models.Entities.HashTag", b =>
@@ -243,35 +248,48 @@ namespace APCM.Migrations
                     b.ToTable("HashTagItem");
                 });
 
+            modelBuilder.Entity("APCM.Models.Entities.Collection", b =>
+                {
+                    b.HasOne("APCM.Models.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("APCM.Models.Entities.CustomField", b =>
                 {
-                    b.HasOne("APCM.Models.Entities.Collection", null)
+                    b.HasOne("APCM.Models.Entities.Collection", "Collection")
                         .WithMany("CustomFields")
-                        .HasForeignKey("CollectionId");
+                        .HasForeignKey("CollectionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Collection");
                 });
 
             modelBuilder.Entity("APCM.Models.Entities.CustomFieldValue", b =>
                 {
-                    b.HasOne("APCM.Models.Entities.CustomField", "CustomField")
-                        .WithMany()
-                        .HasForeignKey("CustomFieldId")
+                    b.HasOne("APCM.Models.Entities.Item", "Item")
+                        .WithMany("CustomFieldValues")
+                        .HasForeignKey("ItemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("APCM.Models.Entities.Item", null)
-                        .WithMany("CustomFieldValues")
-                        .HasForeignKey("ItemId");
-
-                    b.Navigation("CustomField");
+                    b.Navigation("Item");
                 });
 
             modelBuilder.Entity("APCM.Models.Entities.Item", b =>
                 {
-                    b.HasOne("APCM.Models.Entities.Collection", null)
+                    b.HasOne("APCM.Models.Entities.Collection", "Collection")
                         .WithMany("Items")
                         .HasForeignKey("CollectionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Collection");
                 });
 
             modelBuilder.Entity("HashTagItem", b =>

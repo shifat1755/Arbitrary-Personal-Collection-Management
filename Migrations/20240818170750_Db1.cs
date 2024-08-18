@@ -6,27 +6,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace APCM.Migrations
 {
     /// <inheritdoc />
-    public partial class Fix9 : Migration
+    public partial class Db1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "Collections",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Category = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Collections", x => x.Id);
-                });
-
             migrationBuilder.CreateTable(
                 name: "Comments",
                 columns: table => new
@@ -88,23 +72,46 @@ namespace APCM.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CustomField",
+                name: "Collections",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Category = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ItemCount = table.Column<int>(type: "int", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Collections", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Collections_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CustomFields",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Value = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CollectionId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    CollectionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CustomField", x => x.Id);
+                    table.PrimaryKey("PK_CustomFields", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_CustomField_Collections_CollectionId",
+                        name: "FK_CustomFields_Collections_CollectionId",
                         column: x => x.CollectionId,
                         principalTable: "Collections",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -115,10 +122,7 @@ namespace APCM.Migrations
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CollectionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Topic = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CustomFieldId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -129,11 +133,27 @@ namespace APCM.Migrations
                         principalTable: "Collections",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CustomFieldValues",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    FieldName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Value = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ItemId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CustomFieldValues", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Items_CustomField_CustomFieldId",
-                        column: x => x.CustomFieldId,
-                        principalTable: "CustomField",
-                        principalColumn: "Id");
+                        name: "FK_CustomFieldValues_Items_ItemId",
+                        column: x => x.ItemId,
+                        principalTable: "Items",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -161,9 +181,19 @@ namespace APCM.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_CustomField_CollectionId",
-                table: "CustomField",
+                name: "IX_Collections_UserId",
+                table: "Collections",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CustomFields_CollectionId",
+                table: "CustomFields",
                 column: "CollectionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CustomFieldValues_ItemId",
+                table: "CustomFieldValues",
+                column: "ItemId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_HashTagItem_itemsId",
@@ -174,11 +204,6 @@ namespace APCM.Migrations
                 name: "IX_Items_CollectionId",
                 table: "Items",
                 column: "CollectionId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Items_CustomFieldId",
-                table: "Items",
-                column: "CustomFieldId");
         }
 
         /// <inheritdoc />
@@ -188,13 +213,16 @@ namespace APCM.Migrations
                 name: "Comments");
 
             migrationBuilder.DropTable(
+                name: "CustomFields");
+
+            migrationBuilder.DropTable(
+                name: "CustomFieldValues");
+
+            migrationBuilder.DropTable(
                 name: "HashTagItem");
 
             migrationBuilder.DropTable(
                 name: "Likes");
-
-            migrationBuilder.DropTable(
-                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "Items");
@@ -203,10 +231,10 @@ namespace APCM.Migrations
                 name: "hashTags");
 
             migrationBuilder.DropTable(
-                name: "CustomField");
+                name: "Collections");
 
             migrationBuilder.DropTable(
-                name: "Collections");
+                name: "Users");
         }
     }
 }

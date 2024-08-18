@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace APCM.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240814194313_Fix9")]
-    partial class Fix9
+    [Migration("20240818172354_Db3")]
+    partial class Db3
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -51,6 +51,8 @@ namespace APCM.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("Collections");
                 });
 
@@ -83,12 +85,36 @@ namespace APCM.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("CollectionId")
+                    b.Property<Guid>("CollectionId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CollectionId");
+
+                    b.ToTable("CustomFields");
+                });
+
+            modelBuilder.Entity("APCM.Models.Entities.CustomFieldValue", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("FieldName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("ItemId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Type")
                         .IsRequired()
@@ -100,9 +126,9 @@ namespace APCM.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CollectionId");
+                    b.HasIndex("ItemId");
 
-                    b.ToTable("CustomField");
+                    b.ToTable("CustomFieldValues");
                 });
 
             modelBuilder.Entity("APCM.Models.Entities.HashTag", b =>
@@ -132,16 +158,7 @@ namespace APCM.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("CustomFieldId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Topic")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("UserId")
@@ -150,8 +167,6 @@ namespace APCM.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CollectionId");
-
-                    b.HasIndex("CustomFieldId");
 
                     b.ToTable("Items");
                 });
@@ -230,24 +245,48 @@ namespace APCM.Migrations
                     b.ToTable("HashTagItem");
                 });
 
+            modelBuilder.Entity("APCM.Models.Entities.Collection", b =>
+                {
+                    b.HasOne("APCM.Models.Entities.User", "User")
+                        .WithMany("Collections")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("APCM.Models.Entities.CustomField", b =>
                 {
-                    b.HasOne("APCM.Models.Entities.Collection", null)
+                    b.HasOne("APCM.Models.Entities.Collection", "Collection")
                         .WithMany("CustomFields")
-                        .HasForeignKey("CollectionId");
+                        .HasForeignKey("CollectionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Collection");
+                });
+
+            modelBuilder.Entity("APCM.Models.Entities.CustomFieldValue", b =>
+                {
+                    b.HasOne("APCM.Models.Entities.Item", "Item")
+                        .WithMany("CustomFieldValues")
+                        .HasForeignKey("ItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Item");
                 });
 
             modelBuilder.Entity("APCM.Models.Entities.Item", b =>
                 {
-                    b.HasOne("APCM.Models.Entities.Collection", null)
+                    b.HasOne("APCM.Models.Entities.Collection", "Collection")
                         .WithMany("Items")
                         .HasForeignKey("CollectionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("APCM.Models.Entities.CustomField", null)
-                        .WithMany("Items")
-                        .HasForeignKey("CustomFieldId");
+                    b.Navigation("Collection");
                 });
 
             modelBuilder.Entity("HashTagItem", b =>
@@ -272,9 +311,14 @@ namespace APCM.Migrations
                     b.Navigation("Items");
                 });
 
-            modelBuilder.Entity("APCM.Models.Entities.CustomField", b =>
+            modelBuilder.Entity("APCM.Models.Entities.Item", b =>
                 {
-                    b.Navigation("Items");
+                    b.Navigation("CustomFieldValues");
+                });
+
+            modelBuilder.Entity("APCM.Models.Entities.User", b =>
+                {
+                    b.Navigation("Collections");
                 });
 #pragma warning restore 612, 618
         }

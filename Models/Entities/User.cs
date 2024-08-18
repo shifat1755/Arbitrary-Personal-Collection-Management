@@ -14,5 +14,6 @@
         public DateOnly DOB { get; set; }
         public DateTime CreatedAt { get; set; }=DateTime.Now;
 
+        public ICollection<Collection>Collections=new List<Collection>();
     }
 }

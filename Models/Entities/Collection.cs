@@ -13,7 +13,6 @@ namespace APCM.Models.Entities
         public User User { get; set; }
         public string Category { get; set; }
         public ICollection<Item> Items { get; set; } = new List<Item>();
-        public int ItemCount { get; set; }= 0;
         public ICollection<CustomField> CustomFields { get; set; } = new List<CustomField>();
         public DateTime CreatedAt { get; set; } = DateTime.Now;
     }

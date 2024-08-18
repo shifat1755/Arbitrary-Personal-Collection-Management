@@ -2,6 +2,7 @@ using APCM.Data;
 using APCM.Services.CollectionService;
 using APCM.Services.CommonService;
 using APCM.Services.HomeService;
+using APCM.Services.ItemService;
 using APCM.Services.UserService;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,6 +20,10 @@ builder.Services.AddScoped<ICommonService, CommonService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ICollectionService, CollectionService>();
 builder.Services.AddScoped<IHomeService, HomeService>();
+builder.Services.AddScoped<IItemService, ItemService>();
+
+
+
 
 
 

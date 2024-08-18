@@ -31,14 +31,19 @@
                         @if (User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
-                                @User.Identity.Name <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Logout">LogOut</a>
-                            </li>
-                            <li class="nav-item">
                                 @User.Identity.Name <a class="nav-link text-dark" asp-area="" asp-controller="Collection" asp-action="Create">CreateCollection</a>
                             </li>
-                            <li class="nav-item">
-                                @User.Identity.Name <a class="nav-link text-dark" asp-area="" asp-controller="Collection" asp-action="Edit">Edit</a>
-                            </li>
+                        }
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <ul class="navbar-nav ms-auto">
+                                <li class="nav-item">
+                                    <span class="nav-link">@User.Identity.Name</span>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Logout">LogOut</a>
+                                </li>
+                            </ul>
                         }
 
                     </ul>

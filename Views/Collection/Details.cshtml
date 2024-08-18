@@ -8,11 +8,11 @@
 <div class="flex align-items-left">
     <h2 class="mb-0">@Model.Collection.Title</h2>
     <p class="mb-0"><strong>Category: </strong>@Model.Collection.Category</p>
-    <p class="mb-0"><strong>Items: </strong>@Model.Collection.ItemCount</p>
+    <p class="mb-0"><strong>Items: </strong>@Model.Collection.Items.Count</p>
     <p class="mb-0"><strong>Description: </strong>@Model.Collection.Description</p>
     <div class="mt-2 mb-0">
         <button class="btn btn-info w-25" onclick="window.location.href='/Collection/Edit/@Model.Collection.Id'">Edit Collection</button>
-        <button class="btn btn-info w-25">Add Item</button>
+        <button class="btn btn-info w-25" onclick="window.location.href='/Item/Create/@Model.Collection.Id'">Add Item</button>
     </div>
     <hr />
 
