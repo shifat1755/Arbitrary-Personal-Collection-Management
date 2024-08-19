@@ -133,6 +133,11 @@ namespace APCM.Services.CollectionService
                 var data = await _dbContext.Collections
                     .Include(c => c.CustomFields)
                     .Include(c=>c.Items)
+                        .ThenInclude(i=>i.CustomFieldValues)
+                    .Include(c => c.Items)
+                        .ThenInclude(i => i.Likes)
+                    .Include(c => c.Items)
+                        .ThenInclude(i => i.Comments)
                     .FirstOrDefaultAsync(x => x.Id == collectionId);
      
                     response.isSuccessful = true;

@@ -23,11 +23,6 @@ builder.Services.AddScoped<IHomeService, HomeService>();
 builder.Services.AddScoped<IItemService, ItemService>();
 
 
-
-
-
-
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

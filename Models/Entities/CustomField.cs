@@ -8,9 +8,5 @@ namespace APCM.Models.Entities
         public string Name { get; set; }
         public string Type { get; set; }
         public Guid CollectionId { get; set; }
-
-        [ForeignKey(nameof(CollectionId))]
-        public Collection Collection { get; set; }
-
     }
 }

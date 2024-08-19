@@ -1,6 +1,77 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
-<p>Add Item here</p>
+﻿@model APCM.Models.Item.AddItemViewModel;
+@using System.Text;
+<form asp-action="Add" method="post" id="@Model.Id">
+    <input type="hidden" asp-for="UserId"/>
+    <input type="hidden" asp-for="CollectionId" />
+
+    <div class="mt-3">
+        <label class="form-label">Item Name</label>
+        <input type="text" class="form-control" asp-for="Title"/>
+    </div>
+    <div id="customHtmlInput"></div>
+    <div class="mt-3 d-flex justify-content-center">
+        <button type="submit" class="btn btn-primary w-25" >Submit</button>
+    </div>
+</form>
+<script>
+    var customFieldVal = @Html.Raw(Json.Serialize(Model.CustomFieldValues?? new List<APCM.Models.Item.CustomFieldValueViewModel>()));
+    console.log(customFieldVal);
+    
+    function getRandomId(){;
+        const id = Math.floor(Math.random() * 1000000000).toString();
+        return id
+    }
+    function createField(fieldId, fieldName, fieldType, fieldValue) {
+        fieldValue=fieldValue?fieldValue:"";
+        fieldId = fieldId ? fieldId : getRandomId();
+        console.log('=========>', fieldId, fieldName, fieldValue,fieldType)
+
+        let fieldHtml = `<div id="${fieldId}" class="mt-3">`;
+        let fieldHtml = `<div id="${fieldId}" class="mt-3">`;
+        fieldHtml += `<input type="hidden" name="CustomFieldValues.Index" value="${fieldId}" />`;
+        fieldHtml += `<input type="hidden" name="CustomFieldValues[${fieldId}].Type" value="${fieldType}" />`;
+
+        if (fieldType == "bool") {
+            fieldHtml += `<div class="d-flex align-items-center">`;
+        }
+
+        fieldHtml += `<input type="hidden" name="CustomFieldValues[${fieldId}].FieldName" value="${fieldName}"/>
+        <text class="mb-2">${fieldName}<text/>`
+
+        switch (fieldType) {
+            case "int":
+                fieldValue = fieldValue === "" ? "" : parseInt(fieldValue, 10);
+                fieldHtml += `<input type="number" class="form-control" name="CustomFieldValues[${fieldId}].Value" placeholder="Int value" value="${fieldValue}" />`;
+                break;
+            case "string":
+                fieldHtml += `<input type="text" class="form-control" name="CustomFieldValues[${fieldId}].Value" placeholder="String value" value="${fieldValue}" />`;
+                break;
+            case "multiline":
+                fieldHtml += `<textarea class="form-control" name="CustomFieldValues[${fieldId}].Value" rows="2" placeholder="Multiline text here">${fieldValue}</textarea>`;
+                break;
+            case "bool":
+                const checked = fieldValue === "true" ? "checked" : "";
+                fieldHtml += `<input type="hidden" name="CustomFieldValues[${fieldId}].Value" value="false">`;
+                fieldHtml += `<input type="checkbox" class="form-check-input" style="transform: scale(1.8); margin-left: 12px; margin-bottom:6px" name="CustomFields[${fieldId}].Value" value="true" ${checked} />`;
+                fieldHtml += `</div>`;
+                break;
+            case "date":
+                fieldHtml += `<input type="date" class="form-control" name="CustomFieldValues[${fieldId}].Value" value="${fieldValue}" />`;
+                break;
+        }
+
+        fieldHtml += `</div>`;
+
+        return fieldHtml;
+    }
+
+    function renderCustomFields() {
+        customFieldVal.forEach(field => {
+            var htmlField = createField(field.id, field.fieldName, field.type, field.value);
+            document.getElementById("customHtmlInput").insertAdjacentHTML("beforeend", htmlField);
+        })
+    }
+    window.onload = function () {
+        renderCustomFields();
+    }
+</script>

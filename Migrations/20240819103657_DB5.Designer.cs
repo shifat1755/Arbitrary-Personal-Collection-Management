@@ -4,6 +4,7 @@ using APCM.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace APCM.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240819103657_DB5")]
+    partial class DB5
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -276,19 +279,23 @@ namespace APCM.Migrations
 
             modelBuilder.Entity("APCM.Models.Entities.CustomFieldValue", b =>
                 {
-                    b.HasOne("APCM.Models.Entities.Item", null)
+                    b.HasOne("APCM.Models.Entities.Item", "Item")
                         .WithMany("CustomFieldValues")
                         .HasForeignKey("ItemId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("Item");
                 });
 
             modelBuilder.Entity("APCM.Models.Entities.Item", b =>
                 {
-                    b.HasOne("APCM.Models.Entities.Collection", null)
+                    b.HasOne("APCM.Models.Entities.Collection", "Collection")
                         .WithMany("Items")
                         .HasForeignKey("CollectionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Collection");
                 });
 
             modelBuilder.Entity("APCM.Models.Entities.Like", b =>

@@ -53,6 +53,8 @@ namespace APCM.Controllers
             }
 
         }
+
+        [Authorize(Roles = "User,Admin")]
         [HttpGet]
         public async Task<IActionResult>Edit(Guid id)
         {
@@ -74,6 +76,8 @@ namespace APCM.Controllers
 
             return View("Create",data);
         }
+
+        [Authorize(Roles = "User,Admin")]
         [HttpPost]
         public async Task<IActionResult> Edit(CreateCollectionViewModel model)
         {

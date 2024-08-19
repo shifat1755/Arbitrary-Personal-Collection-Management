@@ -49,10 +49,10 @@
         var htmlField = `
                 <div class="scroll-item" id="${item.id}" style="overflow: hidden; text-overflow: ellipsis;" onclick="window.location.href='/Collection/Details/${item.id}'">
                     <div>
-                        <p class="mb-0" style="font-size:13px;"><strong>${item.title}</strong></p>
+                        <p class="mb-0" style="font-size:14px;"><strong>${item.title}</strong></p>
                         <p class="mt-0 fst-italic" style="font-size:11px;"><strong>${item.category}</strong></p>
                         <p class="mt-0 mb-2" style="font-size:12px;">Items: ${item.items.length}</p>
-                            <p class="flex-wrap mt-0" style="font-size:12px;  white-space: normal;">About: ${item.description}</p>
+                        <p class="flex-wrap mt-0" style="font-size:12px;  white-space: normal;">About: ${item.description}</p>
                     </div>
                 </div>`;
         return htmlField;

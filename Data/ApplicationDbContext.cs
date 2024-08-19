@@ -22,7 +22,7 @@ namespace APCM.Data
             modelBuilder.Entity<CustomFieldValue>()
                     .HasKey(cfv => cfv.Id);
             modelBuilder.Entity<CustomFieldValue>()
-                .HasOne(cfv => cfv.Item)
+                .HasOne<Item>()
                 .WithMany(i=>i.CustomFieldValues)
                 .HasForeignKey(fk=>fk.ItemId)
                 .OnDelete(DeleteBehavior.Cascade);
@@ -30,7 +30,7 @@ namespace APCM.Data
             modelBuilder.Entity<CustomField>()
                     .HasKey(cfv => cfv.Id);
             modelBuilder.Entity<CustomField>()
-                .HasOne(cf=>cf.Collection)
+                .HasOne<Collection>()
                 .WithMany(i=>i.CustomFields)
                 .HasForeignKey(cf=>cf.CollectionId)
                 .OnDelete(DeleteBehavior.Cascade);
@@ -46,7 +46,7 @@ namespace APCM.Data
             modelBuilder.Entity<Item>()
                 .HasKey(cfv => cfv.Id);
             modelBuilder.Entity<Item>()
-                .HasOne(cf => cf.Collection)
+                .HasOne<Collection>()
                 .WithMany(i => i.Items)
                 .HasForeignKey(cf => cf.CollectionId)
                 .OnDelete(DeleteBehavior.Cascade);

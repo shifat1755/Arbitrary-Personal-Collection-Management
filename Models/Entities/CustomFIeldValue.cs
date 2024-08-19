@@ -10,8 +10,5 @@ namespace APCM.Models.Entities
         public string? Value { get; set; }
         public string? Type { get; set; }
         public Guid? ItemId { get; set; }
-       
-        [ForeignKey(nameof(ItemId))]
-        public Item? Item { get; set; }
     }
 }

@@ -5,19 +5,85 @@
 }
 @model APCM.Models.Collection.CollectionDetailsViewModel;
 @using System.Text;
-<div class="flex align-items-left">
-    <h2 class="mb-0">@Model.Collection.Title</h2>
-    <p class="mb-0"><strong>Category: </strong>@Model.Collection.Category</p>
-    <p class="mb-0"><strong>Items: </strong>@Model.Collection.Items.Count</p>
-    <p class="mb-0"><strong>Description: </strong>@Model.Collection.Description</p>
-    <div class="mt-2 mb-0">
-        <button class="btn btn-info w-25" onclick="window.location.href='/Collection/Edit/@Model.Collection.Id'">Edit Collection</button>
-        <button class="btn btn-info w-25" onclick="window.location.href='/Item/Create/@Model.Collection.Id'">Add Item</button>
-    </div>
-    <hr />
 
-</div>
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    <style>
+        .horizontal-scrollable {
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+            .horizontal-scrollable .scroll-item {
+                display: inline-block;
+                width: 150px;
+                height: 250px;
+                margin-right: 10px;
+            }
+
+        .scroll-item {
+            width: 150px;
+            height: 150px;
+            margin-right: 10px;
+            color: black;
+            padding: 10px;
+            background-color: #F5F5F5;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0.2, 0.2, 0.2, 0.2);
+        }
+
+    </style>
+    </head>
+    <body>
+    <div class="flex align-items-left">
+        <h2 class="mb-0">@Model.Collection.Title</h2>
+        <p class="mb-0"><strong>Category: </strong>@Model.Collection.Category</p>
+        <p class="mb-0"><strong>Items: </strong>@Model.Collection.Items.Count</p>
+        <p class="mb-0"><strong>Description: </strong>@Model.Collection.Description</p>
+        <div class="mt-2 mb-0">
+            @if (User.Identity.IsAuthenticated)
+            {
+                <button class="btn btn-info" style="width:250" onclick="window.location.href='/Collection/Edit/@Model.Collection.Id'">Edit Collection</button>
+            }
+
+        </div>
+        <hr />
+        <div id="itemContainer" class=" container-fluid horizontal-scrollable"></div>
+        <div class="d-flex mt-2">
+            @if (User.Identity.IsAuthenticated)
+            {
+                <button class="btn btn-info" onclick="window.location.href='/Item/Add?collectionId=@Model.Collection.Id'">Add Item</button>
+            }
+        </div>
+    </div>
+
+    </body>
+</html>
 <script>
     var collection = @Html.Raw(Json.Serialize(Model.Collection?? new APCM.Models.Entities.Collection()));
     console.log(collection);
+
+    function createField(item) { 
+        console.log(item)
+        var htmlField = `
+                    <div class="scroll-item" id="${item.id}" style="overflow: hidden; text-overflow: ellipsis;" onclick="window.location.href='/Item/Details/${item.id}'">
+                        <div>
+                            <p class="mb-0" style="font-size:14px;"><strong>${item.title}</strong></p>
+                        </div>
+                    </div>`;
+        return htmlField;
+    }
+
+
+    function renderItems(){
+        collection.items.forEach(item => {
+            var htmlField = createField(item);
+            document.getElementById('itemContainer').insertAdjacentHTML('beforeend',htmlField)
+        })
+    }
+
+    window.onload=function(){
+        renderItems();
+    }
 </script>
