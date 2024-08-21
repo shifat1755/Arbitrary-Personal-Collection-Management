@@ -49,7 +49,8 @@ namespace APCM.Controllers
             {
                 model.UserId =Guid.Parse(User?.FindFirst("Id").Value);
                 var response = await _collectionService.CreateCollection(model);
-                return View(model);
+                return RedirectToAction("Index","Home");
+                /*return View(model);*/
             }
 
         }

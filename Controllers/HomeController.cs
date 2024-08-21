@@ -25,6 +25,7 @@ namespace APCM.Controllers
             {
                 RecentCollections = (await _homeService.RecentCollections(recent)).Data,
                 LargestCollections=(await _homeService.LargestCollections(largest)).Data,
+                hashTags= (await _homeService.GetTags()).Data,
             };
             return View(data);
         }

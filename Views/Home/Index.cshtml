@@ -38,16 +38,27 @@
         </div>
 
     </div>
+    <div class="mt-5">
+        <h5 class="mb-2">Tag Cloud</h5>
+        <div class="d-flex flex-row" style="gap: 1rem;">
+            @foreach (var tag in Model.hashTags)
+            {
+                <p class="mr-3" style="cursor: pointer;text-decoration: underline;" onclick="">#@tag.Name</p>
+            }
+        </div>
+    </div>
 </body>
 </html>
 
 <script>
     var recentCollections = @Html.Raw(Json.Serialize(Model.RecentCollections ?? new List<APCM.Models.Entities.Collection>()));
     var largestCollections = @Html.Raw(Json.Serialize(Model.LargestCollections ?? new List<APCM.Models.Entities.Collection>()));
+    var hashTags = @Html.Raw(Json.Serialize(Model.hashTags ?? new List<APCM.Models.Entities.Tag>()));
+    console.log(hashTags)
 
     function createField(item) {
         var htmlField = `
-                <div class="scroll-item" id="${item.id}" style="overflow: hidden; text-overflow: ellipsis;" onclick="window.location.href='/Collection/Details/${item.id}'">
+                    <div class="scroll-item" id="${item.id}" style="cursor: pointer; overflow: hidden; text-overflow: ellipsis; " onclick="window.location.href='/Collection/Details/${item.id}'">
                     <div>
                         <p class="mb-0" style="font-size:14px;"><strong>${item.title}</strong></p>
                         <p class="mt-0 fst-italic" style="font-size:11px;"><strong>${item.category}</strong></p>

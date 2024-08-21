@@ -1,8 +1,10 @@
-﻿namespace APCM.Models.Entities
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace APCM.Models.Entities
 {
     public class Tag
     {
-        public Guid Id { get; set; }
+        [Key]
         public string Name { get; set; }
         public ICollection<Item> items { get; set; }=new List<Item>();
     }

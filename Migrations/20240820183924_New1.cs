@@ -6,49 +6,20 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace APCM.Migrations
 {
     /// <inheritdoc />
-    public partial class Db1 : Migration
+    public partial class New1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Comments",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Data = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ItemId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Created = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Comments", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "hashTags",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Tag = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_hashTags", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Likes",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ItemId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Likes", x => x.Id);
+                    table.PrimaryKey("PK_hashTags", x => x.Name);
                 });
 
             migrationBuilder.CreateTable(
@@ -80,7 +51,6 @@ namespace APCM.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Category = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ItemCount = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
@@ -136,14 +106,35 @@ namespace APCM.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Comments",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Data = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ItemId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Comments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Comments_Items_ItemId",
+                        column: x => x.ItemId,
+                        principalTable: "Items",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "CustomFieldValues",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    FieldName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Value = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ItemId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    FieldName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Type = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ItemId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -157,25 +148,44 @@ namespace APCM.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "HashTagItem",
+                name: "ItemTag",
                 columns: table => new
                 {
-                    HashTagsId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TagsName = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     itemsId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_HashTagItem", x => new { x.HashTagsId, x.itemsId });
+                    table.PrimaryKey("PK_ItemTag", x => new { x.TagsName, x.itemsId });
                     table.ForeignKey(
-                        name: "FK_HashTagItem_Items_itemsId",
+                        name: "FK_ItemTag_Items_itemsId",
                         column: x => x.itemsId,
                         principalTable: "Items",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_HashTagItem_hashTags_HashTagsId",
-                        column: x => x.HashTagsId,
+                        name: "FK_ItemTag_hashTags_TagsName",
+                        column: x => x.TagsName,
                         principalTable: "hashTags",
+                        principalColumn: "Name",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Likes",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ItemId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Likes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Likes_Items_ItemId",
+                        column: x => x.ItemId,
+                        principalTable: "Items",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -184,6 +194,11 @@ namespace APCM.Migrations
                 name: "IX_Collections_UserId",
                 table: "Collections",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Comments_ItemId",
+                table: "Comments",
+                column: "ItemId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CustomFields_CollectionId",
@@ -196,14 +211,19 @@ namespace APCM.Migrations
                 column: "ItemId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_HashTagItem_itemsId",
-                table: "HashTagItem",
-                column: "itemsId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Items_CollectionId",
                 table: "Items",
                 column: "CollectionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ItemTag_itemsId",
+                table: "ItemTag",
+                column: "itemsId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Likes_ItemId",
+                table: "Likes",
+                column: "ItemId");
         }
 
         /// <inheritdoc />
@@ -219,16 +239,16 @@ namespace APCM.Migrations
                 name: "CustomFieldValues");
 
             migrationBuilder.DropTable(
-                name: "HashTagItem");
+                name: "ItemTag");
 
             migrationBuilder.DropTable(
                 name: "Likes");
 
             migrationBuilder.DropTable(
-                name: "Items");
+                name: "hashTags");
 
             migrationBuilder.DropTable(
-                name: "hashTags");
+                name: "Items");
 
             migrationBuilder.DropTable(
                 name: "Collections");

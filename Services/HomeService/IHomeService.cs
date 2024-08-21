@@ -7,5 +7,7 @@ namespace APCM.Services.HomeService
     {
         public Task<Response<List<Collection>>> RecentCollections(int a);
         public Task<Response<List<Collection>>> LargestCollections(int a);
+        public Task<Response<List<Tag>>> GetTags();
+
     }
 }

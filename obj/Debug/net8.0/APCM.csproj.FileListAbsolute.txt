@@ -136,3 +136,7 @@ C:\Users\Syed Shifat\source\repos\Arbitrary Collection Management\APCM\obj\Debug
 C:\Users\Syed Shifat\source\repos\Arbitrary Collection Management\APCM\obj\Debug\net8.0\APCM.genruntimeconfig.cache
 C:\Users\Syed Shifat\source\repos\Arbitrary Collection Management\APCM\obj\Debug\net8.0\ref\APCM.dll
 C:\Users\Syed Shifat\source\repos\Arbitrary Collection Management\APCM\bin\Debug\net8.0\BouncyCastle.Cryptography.dll
+C:\Users\Syed Shifat\source\repos\Arbitrary Collection Management\APCM\bin\Debug\net8.0\Microsoft.AspNetCore.Connections.Abstractions.dll
+C:\Users\Syed Shifat\source\repos\Arbitrary Collection Management\APCM\bin\Debug\net8.0\Microsoft.AspNetCore.SignalR.Common.dll
+C:\Users\Syed Shifat\source\repos\Arbitrary Collection Management\APCM\bin\Debug\net8.0\Microsoft.Extensions.Features.dll
+C:\Users\Syed Shifat\source\repos\Arbitrary Collection Management\APCM\bin\Debug\net8.0\Microsoft.Extensions.Options.dll

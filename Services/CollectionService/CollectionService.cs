@@ -22,22 +22,19 @@ namespace APCM.Services.CollectionService
             var response = new Response<object>();
             try
             {
-                var collection = new Collection();
-                collection = MapCommonFields(data, collection);
+                var user = await _dbContext.Users.FindAsync(data.UserId);
+                var collection = MapCommonFields(data, new Collection());
                 collection.CreatedAt = DateTime.Now;
                 foreach (var item in data.CustomFields)
                 {
-                    var customItem = new CustomField()
+                    var customItem = new CustomField
                     {
                         Name = item.Name,
-                        Type = item.Type,
-                        CollectionId = data.Id
+                        Type = item.Type
                     };
-                    await _dbContext.AddAsync(customItem);
                     collection.CustomFields.Add(customItem);
                 }
-
-                await _dbContext.Collections.AddAsync(collection);
+                user.Collections.Add(collection);
                 await _dbContext.SaveChangesAsync();
                 response.isSuccessful = true;
             }
@@ -48,6 +45,7 @@ namespace APCM.Services.CollectionService
             }
             return response;
         }
+
         public Collection MapCommonFields(CreateCollectionViewModel model, Collection collection)
         {
             collection.Title = model.Title;
@@ -144,8 +142,8 @@ namespace APCM.Services.CollectionService
                     response.Data = data;
                 
             }
-            catch (Exception ex)
-            {
+            catch (Exception ex) {
+            
                 Console.WriteLine(ex.Message);
                 response.isSuccessful = false;
             }

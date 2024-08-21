@@ -1,32 +1,52 @@
 ﻿@model APCM.Models.Item.AddItemViewModel;
 @using System.Text;
-<form asp-action="Add" method="post" id="@Model.Id">
-    <input type="hidden" asp-for="UserId"/>
-    <input type="hidden" asp-for="CollectionId" />
 
-    <div class="mt-3">
-        <label class="form-label">Item Name</label>
-        <input type="text" class="form-control" asp-for="Title"/>
-    </div>
-    <div id="customHtmlInput"></div>
-    <div class="mt-3 d-flex justify-content-center">
-        <button type="submit" class="btn btn-primary w-25" >Submit</button>
-    </div>
-</form>
+<!DOCTYPE Html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@@yaireo/tagify/dist/tagify.css">
+</head>
+<body>
+    <form asp-action="Add" method="post" id="@Model.Id">
+        <input type="hidden" asp-for="UserId" />
+        <input type="hidden" asp-for="CollectionId" />
+        <input type="hidden" asp-for="Tags" id="inputTags" />
+
+        <div class="mt-3">
+            <label class="form-label">Item Name</label>
+            <input type="text" class="form-control" asp-for="Title" />
+        </div>
+        <div id="customHtmlInput"></div>
+        <div class="mt-3">
+            <label class="form-label">Tags</label>
+            <input type="text" id="tags" name="Tags" class="form-control" placeholder="Enter tags" />
+        </div>
+        <div class="mt-3 d-flex justify-content-center">
+            <button type="submit" class="btn btn-primary w-25">Submit</button>
+        </div>
+    </form>
+    <script src="https://cdn.jsdelivr.net/npm/@@yaireo/tagify"></script>
+</body>
+</html>
+
+
 <script>
-    var customFieldVal = @Html.Raw(Json.Serialize(Model.CustomFieldValues?? new List<APCM.Models.Item.CustomFieldValueViewModel>()));
+    var customFieldVal = @Html.Raw(Json.Serialize(Model.CustomFieldValues ?? new List<APCM.Models.Item.CustomFieldValueViewModel>()));
     console.log(customFieldVal);
-    
-    function getRandomId(){;
-        const id = Math.floor(Math.random() * 1000000000).toString();
-        return id
-    }
-    function createField(fieldId, fieldName, fieldType, fieldValue) {
-        fieldValue=fieldValue?fieldValue:"";
-        fieldId = fieldId ? fieldId : getRandomId();
-        console.log('=========>', fieldId, fieldName, fieldValue,fieldType)
 
-        let fieldHtml = `<div id="${fieldId}" class="mt-3">`;
+    var itemTags = @Html.Raw(Json.Serialize(Model.Tags ?? new List<string>()));
+    var allTags = @Html.Raw(Json.Serialize(Model.AllTags ?? new List<string>()));
+
+    function getRandomId() {
+        const id = Math.floor(Math.random() * 1000000000).toString();
+        return id;
+    }
+
+    function createField(fieldId, fieldName, fieldType, fieldValue) {
+        fieldValue = fieldValue ? fieldValue : "";
+        fieldId = fieldId ? fieldId : getRandomId();
+        console.log('=========>', fieldId, fieldName, fieldValue, fieldType);
+
         let fieldHtml = `<div id="${fieldId}" class="mt-3">`;
         fieldHtml += `<input type="hidden" name="CustomFieldValues.Index" value="${fieldId}" />`;
         fieldHtml += `<input type="hidden" name="CustomFieldValues[${fieldId}].Type" value="${fieldType}" />`;
@@ -36,7 +56,7 @@
         }
 
         fieldHtml += `<input type="hidden" name="CustomFieldValues[${fieldId}].FieldName" value="${fieldName}"/>
-        <text class="mb-2">${fieldName}<text/>`
+                <text class="mb-2">${fieldName}</text>`;
 
         switch (fieldType) {
             case "int":
@@ -50,10 +70,11 @@
                 fieldHtml += `<textarea class="form-control" name="CustomFieldValues[${fieldId}].Value" rows="2" placeholder="Multiline text here">${fieldValue}</textarea>`;
                 break;
             case "bool":
-                const checked = fieldValue === "true" ? "checked" : "";
                 fieldHtml += `<input type="hidden" name="CustomFieldValues[${fieldId}].Value" value="false">`;
-                fieldHtml += `<input type="checkbox" class="form-check-input" style="transform: scale(1.8); margin-left: 12px; margin-bottom:6px" name="CustomFields[${fieldId}].Value" value="true" ${checked} />`;
+                const checked = fieldValue === "true" ? "checked" : "";
+                fieldHtml += `<input type="checkbox" class="form-check-input" style="transform: scale(1.8); margin-left: 12px; margin-bottom:6px" name="CustomFieldValues[${fieldId}].Value" value="true" ${checked} />`;
                 fieldHtml += `</div>`;
+                console.log(fieldHtml)
                 break;
             case "date":
                 fieldHtml += `<input type="date" class="form-control" name="CustomFieldValues[${fieldId}].Value" value="${fieldValue}" />`;
@@ -69,9 +90,35 @@
         customFieldVal.forEach(field => {
             var htmlField = createField(field.id, field.fieldName, field.type, field.value);
             document.getElementById("customHtmlInput").insertAdjacentHTML("beforeend", htmlField);
-        })
+        });
     }
+
     window.onload = function () {
         renderCustomFields();
+
+        var input = document.querySelector('#tags');
+        var tagify = new Tagify(input, {
+            whitelist: allTags,
+            dropdown: {
+                classname: "tags-look",
+                enabled: 1,
+            }
+        });
+
+        tagify.addTags(itemTags);
+
+        document.querySelector('form').addEventListener('submit', function () {
+            var tagsArray = tagify.value.map(tag => tag.value);
+            console.log(tagsArray);
+            document.querySelectorAll('input[name="Tags"]').forEach(input => input.remove());
+            tagsArray.forEach((tag, index) => {
+                var input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = `Tags[${index}]`;
+                input.value = tag;
+                document.querySelector('form').appendChild(input);
+            });
+        });
+
     }
 </script>

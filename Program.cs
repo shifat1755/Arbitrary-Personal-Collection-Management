@@ -1,5 +1,7 @@
 using APCM.Data;
+using APCM.Hubs;
 using APCM.Services.CollectionService;
+using APCM.Services.CommentService;
 using APCM.Services.CommonService;
 using APCM.Services.HomeService;
 using APCM.Services.ItemService;
@@ -21,7 +23,9 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ICollectionService, CollectionService>();
 builder.Services.AddScoped<IHomeService, HomeService>();
 builder.Services.AddScoped<IItemService, ItemService>();
+builder.Services.AddScoped<ICommentService, CommentService>();
 
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 
@@ -40,7 +44,10 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
-
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapHub<CommentHub>("/Home/Index");
+});
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");

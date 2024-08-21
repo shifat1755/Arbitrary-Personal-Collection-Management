@@ -1,0 +1,70 @@
+﻿@model APCM.Models.Item.ItemViewModel;
+@using System.Text;
+
+<!DOCTYPE Html>
+<html>
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/@@microsoft/signalr@8.0.8/dist/browser/signalr.min.js"></script>
+
+    <style>
+        .scrollable-container {
+            height: 550px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="d-flex  flex-column align-items-center justify-content-center">
+        <h2>@Model.Item.Title</h2>
+        @foreach (var field in Model.Item.CustomFieldValues)
+        {
+            @if (field.Value == null) { continue; }
+            string val = field.Value;
+            @if (field.Type == "bool")
+            {
+                val = field.Value == "true" ? "Yes" : "No";
+            }
+            <p class="mb-0 fs-6"><strong>@field.FieldName: </strong>@val</p>
+        }
+        <div class="d-flex flex-row mb-0" style="gap: 1rem;">
+            @foreach (var tag in Model.Item.Tags)
+            {
+                <p class="mr-3" style="cursor: pointer;text-decoration: underline;" onclick="">#@tag.Name</p>
+            }
+        </div>
+    </div>
+    <hr class="mt-0"/>
+    <div class="d-flex justify-content-center">
+        <div class="d-flex align-item-left flex-column" style="width:500px">
+            <div class="d-flex flex-column scrollable-container">
+            </div>
+            <textarea id="commentBox" class="form-control mb-2" rows="1" placeholder="Type comment here"></textarea>
+            <button class="btn btn-secondary" onclick="sendComment()">Add-Comment</button>
+        </div>
+    </div>
+
+</body>
+</html>
+<script>
+    var itemId = '@Model.Item.Id';
+    if (itemId) {
+        var connection = new signalR.HubConnectionBuilder().withUrl("/Home/Index").build();
+        connection.start().then(function () {
+            console.log("Connected to SignalR hub");
+        }).catch(function (err) {
+            console.error("SignalR connection error: ", err.toString());
+        });
+    } else {
+        console.error("Item ID is missing or invalid.");
+    }
+
+
+
+    function sendComment(){
+        var comment = document.getElementById('commentBox').value;
+        console.log(comment);
+    }
+
+</script>

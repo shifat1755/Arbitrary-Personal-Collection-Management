@@ -58,5 +58,22 @@ namespace APCM.Services.HomeService
             }
             return response;
         }
+        public async Task<Response<List<Tag>>> GetTags()
+        {
+            var response = new Response<List<Tag>>();
+            try
+            {
+                var data = await _dbContext.hashTags.ToListAsync();
+                response.Data = data;
+                response.isSuccessful = true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                response.isSuccessful = false;
+            }
+            return response;
+        }
+
     }
 }

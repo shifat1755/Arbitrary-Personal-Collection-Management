@@ -1,9 +1,11 @@
-﻿using APCM.Models.Entities;
+﻿using APCM.Data;
+using APCM.Models.Entities;
 using APCM.Models.Item;
 using APCM.Services.CollectionService;
 using APCM.Services.ItemService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace APCM.Controllers
 {
@@ -11,10 +13,21 @@ namespace APCM.Controllers
     {
         private readonly ICollectionService _collectionService;
         private readonly IItemService _itemService;
+        private readonly ApplicationDbContext _dbContext;
 
-        public ItemController(ICollectionService collectionService, IItemService itemService) {
+        public ItemController(ICollectionService collectionService, IItemService itemService, ApplicationDbContext dbContext) {
             _collectionService=collectionService;
             _itemService=itemService;
+            _dbContext=dbContext;
+        }
+
+        public async Task<IActionResult> Index(Guid id)
+        {
+            var data = new ItemViewModel()
+            {
+                Item = (await _itemService.GetItem(id)).Data
+            };
+            return View(data);
         }
 
         [Authorize(Roles = "User,Admin")]
@@ -41,6 +54,10 @@ namespace APCM.Controllers
                 };
                 model.CustomFieldValues.Add(val);
             }
+            var tags = await _dbContext.hashTags.ToListAsync();
+            foreach (var tag in tags) {
+                model.AllTags.Add(tag.Name);
+            }
             return View(model);
         }
 
@@ -48,13 +65,9 @@ namespace APCM.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(AddItemViewModel model)
         {
-            var response=await _itemService.addItem(model);
+            var response = await _itemService.addItem(model);
+            /*return View(model);*/
             return RedirectToAction("Details","Collection", new {id=model.CollectionId});
-        }
-
-        public async Task<IActionResult> Details(Guid id)
-        {
-            return RedirectToAction("Index", "Home");
         }
     }
 }

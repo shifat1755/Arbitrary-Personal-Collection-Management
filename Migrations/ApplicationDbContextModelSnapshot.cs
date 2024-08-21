@@ -173,15 +173,10 @@ namespace APCM.Migrations
 
             modelBuilder.Entity("APCM.Models.Entities.Tag", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("Id");
+                    b.HasKey("Name");
 
                     b.ToTable("hashTags");
                 });
@@ -230,13 +225,13 @@ namespace APCM.Migrations
 
             modelBuilder.Entity("ItemTag", b =>
                 {
-                    b.Property<Guid>("TagsId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("TagsName")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<Guid>("itemsId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("TagsId", "itemsId");
+                    b.HasKey("TagsName", "itemsId");
 
                     b.HasIndex("itemsId");
 
@@ -245,13 +240,11 @@ namespace APCM.Migrations
 
             modelBuilder.Entity("APCM.Models.Entities.Collection", b =>
                 {
-                    b.HasOne("APCM.Models.Entities.User", "User")
+                    b.HasOne("APCM.Models.Entities.User", null)
                         .WithMany("Collections")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("APCM.Models.Entities.Comment", b =>
@@ -306,7 +299,7 @@ namespace APCM.Migrations
                 {
                     b.HasOne("APCM.Models.Entities.Tag", null)
                         .WithMany()
-                        .HasForeignKey("TagsId")
+                        .HasForeignKey("TagsName")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

@@ -46,7 +46,6 @@
             {
                 <button class="btn btn-info" style="width:250" onclick="window.location.href='/Collection/Edit/@Model.Collection.Id'">Edit Collection</button>
             }
-
         </div>
         <hr />
         <div id="itemContainer" class=" container-fluid horizontal-scrollable"></div>
@@ -67,7 +66,7 @@
     function createField(item) { 
         console.log(item)
         var htmlField = `
-                    <div class="scroll-item" id="${item.id}" style="overflow: hidden; text-overflow: ellipsis;" onclick="window.location.href='/Item/Details/${item.id}'">
+                        <div class="scroll-item" id="${item.id}" style="cursor: pointer; overflow: hidden; text-overflow: ellipsis;" onclick="window.location.href='/Item?id=${item.id}'">
                         <div>
                             <p class="mb-0" style="font-size:14px;"><strong>${item.title}</strong></p>
                         </div>

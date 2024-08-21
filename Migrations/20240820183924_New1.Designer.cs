@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace APCM.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240818173337_Db4")]
-    partial class Db4
+    [Migration("20240820183924_New1")]
+    partial class New1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -112,18 +112,15 @@ namespace APCM.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("FieldName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("ItemId")
+                    b.Property<Guid?>("ItemId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Type")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Value")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -179,15 +176,10 @@ namespace APCM.Migrations
 
             modelBuilder.Entity("APCM.Models.Entities.Tag", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("Id");
+                    b.HasKey("Name");
 
                     b.ToTable("hashTags");
                 });
@@ -236,13 +228,13 @@ namespace APCM.Migrations
 
             modelBuilder.Entity("ItemTag", b =>
                 {
-                    b.Property<Guid>("TagsId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("TagsName")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<Guid>("itemsId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("TagsId", "itemsId");
+                    b.HasKey("TagsName", "itemsId");
 
                     b.HasIndex("itemsId");
 
@@ -273,35 +265,28 @@ namespace APCM.Migrations
 
             modelBuilder.Entity("APCM.Models.Entities.CustomField", b =>
                 {
-                    b.HasOne("APCM.Models.Entities.Collection", "Collection")
+                    b.HasOne("APCM.Models.Entities.Collection", null)
                         .WithMany("CustomFields")
                         .HasForeignKey("CollectionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Collection");
                 });
 
             modelBuilder.Entity("APCM.Models.Entities.CustomFieldValue", b =>
                 {
-                    b.HasOne("APCM.Models.Entities.Item", "Item")
+                    b.HasOne("APCM.Models.Entities.Item", null)
                         .WithMany("CustomFieldValues")
                         .HasForeignKey("ItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Item");
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("APCM.Models.Entities.Item", b =>
                 {
-                    b.HasOne("APCM.Models.Entities.Collection", "Collection")
+                    b.HasOne("APCM.Models.Entities.Collection", null)
                         .WithMany("Items")
                         .HasForeignKey("CollectionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Collection");
                 });
 
             modelBuilder.Entity("APCM.Models.Entities.Like", b =>
@@ -319,7 +304,7 @@ namespace APCM.Migrations
                 {
                     b.HasOne("APCM.Models.Entities.Tag", null)
                         .WithMany()
-                        .HasForeignKey("TagsId")
+                        .HasForeignKey("TagsName")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

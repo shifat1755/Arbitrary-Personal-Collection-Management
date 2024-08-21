@@ -7,7 +7,8 @@
         public Guid CollectionId { get; set; }
         public string? Title { get; set; }
         public ICollection<CustomFieldValueViewModel> CustomFieldValues { get; set; } = new List<CustomFieldValueViewModel>();
-        public ICollection<TagViewModel> Tags { get; set; } = new List<TagViewModel>();
+        public List<string> Tags { get; set; } = new List<string>();
+        public List<string> AllTags { get; set; }= new List<string>();
         public bool isEdit { get; set; } = false;
 
     }
@@ -16,9 +17,5 @@
         public string? FieldName { get; set; }
         public string? Value { get; set; }
         public string? Type { get; set; }
-    }
-    public class TagViewModel {
-        public Guid Id { get; set; }
-        public string Name { get; set; }
     }
 }
