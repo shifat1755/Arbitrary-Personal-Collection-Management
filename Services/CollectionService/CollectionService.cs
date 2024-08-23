@@ -146,6 +146,7 @@ namespace APCM.Services.CollectionService
             
                 Console.WriteLine(ex.Message);
                 response.isSuccessful = false;
+                response.Message = ex.Message;
             }
             return response;
         }

@@ -15,6 +15,12 @@ namespace APCM.Controllers
             _userService = userService;
         }
 
+        public IActionResult Index(string id)
+        {
+            Guid Id= Guid.Parse(id);
+            return View();
+        }
+
         [HttpGet]
         public IActionResult SignUp()
         {

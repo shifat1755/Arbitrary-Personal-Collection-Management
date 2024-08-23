@@ -27,6 +27,8 @@ namespace APCM.Services.ItemService
                 var item= await _dbContext.Items
                     .Include(i=>i.CustomFieldValues)
                     .Include(i=>i.Tags)
+                    .Include(i=>i.Likes)
+                    .Include(i=>i.Comments)
                     .FirstAsync(i=>i.Id==id);
                 response.isSuccessful = true;
                 response.Data = item;

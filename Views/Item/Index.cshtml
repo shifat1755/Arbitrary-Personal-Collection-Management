@@ -1,6 +1,8 @@
 ﻿@model APCM.Models.Item.ItemViewModel;
-@using System.Text;
-
+@using Newtonsoft.Json;
+@{
+    bool authStatus = Context.User.Identity.IsAuthenticated;
+}
 <!DOCTYPE html>
 <html>
 <head>
@@ -31,12 +33,12 @@
         <div class="d-flex flex-row mb-0" style="gap: 1rem;">
             @foreach (var tag in Model.Item.Tags)
             {
-                <p class="mr-3" style="cursor: pointer;text-decoration: underline;" onclick="">#@tag.Name</p>
+                <p class="mr-3" style="cursor: pointer; text-decoration: underline;" onclick="">#@tag.Name</p>
             }
         </div>
         <div class="d-flex flex-row">
             <div class="pb-2" style="padding-right:10px;">
-                <button class="btn btn-danger"><i class="bi bi-heart"></i> like</button>
+                <button class="btn btn-danger" onclick="addLike()"><i class="bi bi-heart"><span id="likeCount">@Model.Item.Likes.Count</span></i></button>
             </div>
             <div>
                 <button class="btn btn-primary" onclick="toggleCommentView()">Comments   <i class="bi bi-arrow-down"></i> </button>
@@ -44,34 +46,26 @@
             </div>
         </div>
     </div>
-    <div id="commentSection" class="d-none justify-content-center">
+    <div id="commentSection" class="d-flex justify-content-center">
         <div class="d-flex align-items-left flex-column" style="width:500px;">
-            <div class="d-flex flex-column scrollable-container">
+            <div id="comments" class="d-flex flex-column scrollable-container">
             </div>
-            <div class="d-flex flex-row">
-                <textarea id="commentBox" class="form-control mb-2" rows="1" placeholder="Type comment here"></textarea>
-                <button class="btn btn-primary" style="height:fit-content;" onclick="sendComment()"><i class="bi bi-send"></i></button>
-            </div>
-
+            @if (User.Identity.IsAuthenticated)
+            {
+                <div class="d-flex flex-row">
+                    <textarea id="commentBox" class="form-control mb-2" rows="1" placeholder="Type comment here"></textarea>
+                    <button class="btn btn-primary" style="height:fit-content;" onclick="sendComment()"><i class="bi bi-send"></i></button>
+                </div>
+            }
         </div>
     </div>
 
     <script>
-
-        /*function toggleCommentView(){
-            var element=document.getElementById('commentSection')
-            if (element.classList.contains('d-none')) {
-                element.classList.remove('d-none')
-                element.classList.add('d-flex')
-            }
-            else{
-                element.classList.remove('d-flex')
-                element.classList.add('d-none')
-            }
-        }*/
-
+        var isAuth = @authStatus.ToString().ToLower();
+        var item = @Html.Raw(Json.Serialize(Model.Item ?? new APCM.Models.Entities.Item()));
         var itemId = '@Model.Item.Id';
-        var connection = new signalR.HubConnectionBuilder().withUrl(`/commentHub`).build();
+        var connection = new signalR.HubConnectionBuilder().withUrl(`/likeCommentHub?ItemId=${itemId}`).build();
+        console.log('==================>',item)
 
         connection.start().then(function () {
             console.log("Connected to SignalR hub");
@@ -79,10 +73,49 @@
             console.error("SignalR connection error: ", err.toString());
         });
 
+        function createHtml(firstName, data, userId) {
+            return `<p style="font-size:12px;" ><strong style="cursor:pointer" onClick="window.location.href='/User?id=${userId}'">${firstName}: </strong>${data}</p>`;
+        }
+
+        connection.on('receiveComment', function (firstName, data, userId) {
+            var htmlField = createHtml(firstName, data, userId);
+            document.getElementById('comments').insertAdjacentHTML('afterbegin', htmlField);
+        });
+        connection.on('liked', function () {
+            var likeElement = document.getElementById('likeCount')
+            var currentCount = parseInt(likeElement.textContent);
+            likeElement.textContent = currentCount + 1;
+        })
+        connection.on('unLiked',function(){
+            var likeElement = document.getElementById('likeCount')
+            var currentCount = parseInt(likeElement.textContent);
+            likeElement.textContent = currentCount - 1;
+        })
+
         function sendComment() {
             var comment = document.getElementById('commentBox').value;
-            console.log(comment);
+            if (comment.trim() === "") { return; }
+
+            connection.invoke("SendComment", itemId,comment).catch(function (err) {
+                console.error("Error sending comment: ", err.toString());
+            });
+            document.getElementById('commentBox').value = "";
         }
+
+        function renderPrevComments(item) {
+            item.comments.forEach(function (comment) {
+                var htmlField = createHtml(comment.firstName, comment.data, comment.userId);
+                document.getElementById('comments').insertAdjacentHTML('afterbegin', htmlField);
+            });
+        }
+        function addLike() {
+            if (isAuth=='false') { return;}
+            connection.invoke('addLike',itemId)
+        }
+        window.onload = function () {
+            renderPrevComments(item);
+        };
     </script>
+
 </body>
 </html>

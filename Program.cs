@@ -5,12 +5,14 @@ using APCM.Services.CommentService;
 using APCM.Services.CommonService;
 using APCM.Services.HomeService;
 using APCM.Services.ItemService;
+using APCM.Services.Like;
 using APCM.Services.UserService;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddSignalR();
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("APCM")));
 builder.Services.AddHttpContextAccessor();
@@ -24,8 +26,7 @@ builder.Services.AddScoped<ICollectionService, CollectionService>();
 builder.Services.AddScoped<IHomeService, HomeService>();
 builder.Services.AddScoped<IItemService, ItemService>();
 builder.Services.AddScoped<ICommentService, CommentService>();
-
-builder.Services.AddSignalR();
+builder.Services.AddScoped<ILikeService, LikeService>();
 
 var app = builder.Build();
 
@@ -47,7 +48,7 @@ app.UseAuthorization();
 
 app.UseEndpoints(endpoints =>
 {
-    endpoints.MapHub<CommentHub>("/commentHub");
+    endpoints.MapHub<LikeCommentHub>("/likeCommentHub");
 });
 app.MapControllerRoute(
     name: "default",

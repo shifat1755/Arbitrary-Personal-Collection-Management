@@ -54,7 +54,7 @@ namespace APCM.Data
             modelBuilder.Entity<Like>()
                 .HasKey(cfv => cfv.Id);
             modelBuilder.Entity<Like>()
-                .HasOne(cf => cf.Item)
+                .HasOne<Item>()
                 .WithMany(i => i.Likes)
                 .HasForeignKey(cf => cf.ItemId)
                 .OnDelete(DeleteBehavior.Cascade);
@@ -62,7 +62,7 @@ namespace APCM.Data
             modelBuilder.Entity<Comment>()
                 .HasKey(cfv => cfv.Id);
             modelBuilder.Entity<Comment>()
-                .HasOne(cf => cf.Item)
+                .HasOne<Item>()
                 .WithMany(i => i.Comments)
                 .HasForeignKey(cf => cf.ItemId)
                 .OnDelete(DeleteBehavior.Cascade);
