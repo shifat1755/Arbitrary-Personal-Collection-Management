@@ -1,8 +1,6 @@
 ﻿using APCM.Models.User;
 using APCM.Services.UserService;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Org.BouncyCastle.Security;
 
 namespace APCM.Controllers
 {
@@ -15,10 +13,17 @@ namespace APCM.Controllers
             _userService = userService;
         }
 
-        public IActionResult Index(string id)
+        public async Task<IActionResult> Index(string id)
         {
             Guid Id= Guid.Parse(id);
-            return View();
+            /*            var viewData = new UserViewModel()
+                        {
+                            user = (await _userService.GetUser(Id)).Data
+                        };*/
+            var user = (await _userService.GetUser(Id)).Data;
+            user.Password = null;
+
+            return View(user);
         }
 
         [HttpGet]

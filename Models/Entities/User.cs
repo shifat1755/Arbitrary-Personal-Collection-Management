@@ -10,7 +10,7 @@
         public string Email { get; set; }
         public bool IsEmailVerified { get; set; } = false;
         public string Role { get; set; } = "User";
-        public string Password { get; set; }
+        public string? Password { get; set; }
         public DateOnly DOB { get; set; }
         public DateTime CreatedAt { get; set; }=DateTime.Now;
 

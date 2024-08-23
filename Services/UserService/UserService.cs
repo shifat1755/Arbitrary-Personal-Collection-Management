@@ -110,5 +110,25 @@ namespace APCM.Services.UserService
             return response;
         }
 
+        public async Task<Response<User>> GetUser(Guid id)
+        {
+            var response = new Response<User>();
+            try
+            {
+                var data = await _dbContext.Users
+                    .Include(i => i.Collections)
+                    .ThenInclude(i => i.Items)
+                    .FirstOrDefaultAsync(i => i.Id == id);
+                response.isSuccessful = true;
+                response.Data = data;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message.ToString());
+                response.isSuccessful = false;
+            }
+            return response;
+        }
+
     }
 }

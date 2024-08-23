@@ -1,6 +1,70 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model APCM.Models.Entities.User
 @{
+    Guid? userId = null;
+    bool isAuth = User.Identity.IsAuthenticated;
+    if (isAuth){
+        userId = Guid.Parse(User?.FindFirst("Id")?.Value);
+    }
 }
-<p>Here Goes the User Profile</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>@Model.FirstName @Model.LastName - Profile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css">
+
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-4 text-center">
+                <img src="@(!string.IsNullOrEmpty(Model.ProfileImage) ? Model.ProfileImage : "https://beforeigosolutions.com/wp-content/uploads/2021/12/dummy-profile-pic-300x300-1.png")"
+                     class="rounded-circle img-thumbnail"
+                     style="width: 150px; height: 150px;">
+
+
+                <h2 class="mt-3">@Model.FirstName @Model.LastName</h2>
+                <p class="text-muted">@Model.Email</p>
+                @if (userId != null && (userId == @Model.Id))
+                {
+                    <p class="text-muted" style="margin-bottom: 1px;">Date of Birth: @Model.DOB</p>
+                }
+                <p class="text-muted" style="margin-top: 1px;">Account Created: @Model.CreatedAt.ToString("MMMM dd, yyyy")</p>
+
+                @if (isAuth)
+                {
+                        <button class="btn btn-info w-50 mb-4">Profile <i class="bi bi-pencil-square"></i></button>
+                }
+            </div>
+
+            <div class="col-md-8">
+                <div class="d-flex align-items-center flex-row">
+                    <h3 class="" style="padding-right:5px;">Collections</h3>
+                    <button class="btn btn-info pl-2" style="height:fit-content" onclick="window.location.href='/Collection/Create'">Create <i class="bi bi-plus-circle"></i></button>
+                </div>
+
+                @if (Model.Collections.Any())
+                {
+                    <div class="flex flex-row overflow-scroll" stye="overflow-y:auto;">
+                        @foreach (var collection in Model.Collections)
+                        {
+                            <div class="container mb-2" style="border: 1px solid #ddd; padding: 15px; margin-bottom: 10px; border-radius: 5px;">
+                                <h4 class="mb-1">@collection.Title</h4>
+                                <p class="mb-1">@collection.Description</p>
+                                <small class="text-muted"><strong>Items:</strong> @collection.Items.Count</small>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-info">
+                        No collections available.
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
