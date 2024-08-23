@@ -44,9 +44,10 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
 app.UseEndpoints(endpoints =>
 {
-    endpoints.MapHub<CommentHub>("/Home/Index");
+    endpoints.MapHub<CommentHub>("/commentHub");
 });
 app.MapControllerRoute(
     name: "default",

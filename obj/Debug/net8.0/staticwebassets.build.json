@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "TNJ14uf6jdeXDQSpEluagAVSH6HPDoImcEgcYwUry9M=",
+  "Hash": "9nGzx5C++cJIroQ1e4hAwNqdXowfBXv7jauNCDlmeLo=",
   "Source": "APCM",
   "BasePath": "_content/APCM",
   "Mode": "Default",
@@ -1193,6 +1193,44 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\lib\\jquery-validation-unobtrusive\\LICENSE.txt"
+    },
+    {
+      "Identity": "C:\\Users\\Syed Shifat\\source\\repos\\Arbitrary Collection Management\\APCM\\wwwroot\\lib\\microsoft-signalr\\signalr.js",
+      "SourceId": "APCM",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Syed Shifat\\source\\repos\\Arbitrary Collection Management\\APCM\\wwwroot\\",
+      "BasePath": "_content/APCM",
+      "RelativePath": "lib/microsoft-signalr/signalr.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\lib\\microsoft-signalr\\signalr.js"
+    },
+    {
+      "Identity": "C:\\Users\\Syed Shifat\\source\\repos\\Arbitrary Collection Management\\APCM\\wwwroot\\lib\\microsoft-signalr\\signalr.min.js",
+      "SourceId": "APCM",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Syed Shifat\\source\\repos\\Arbitrary Collection Management\\APCM\\wwwroot\\",
+      "BasePath": "_content/APCM",
+      "RelativePath": "lib/microsoft-signalr/signalr.min.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\lib\\microsoft-signalr\\signalr.min.js"
     }
   ]
 }

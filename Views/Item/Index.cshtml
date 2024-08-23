@@ -1,11 +1,11 @@
 ﻿@model APCM.Models.Item.ItemViewModel;
 @using System.Text;
 
-<!DOCTYPE Html>
+<!DOCTYPE html>
 <html>
 <head>
-    <script src="https://cdn.jsdelivr.net/npm/@@microsoft/signalr@8.0.8/dist/browser/signalr.min.js"></script>
-
+    <script src="~/lib/microsoft-signalr/signalr.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css">
     <style>
         .scrollable-container {
             height: 550px;
@@ -16,7 +16,7 @@
     </style>
 </head>
 <body>
-    <div class="d-flex  flex-column align-items-center justify-content-center">
+    <div class="d-flex flex-column align-items-center justify-content-center">
         <h2>@Model.Item.Title</h2>
         @foreach (var field in Model.Item.CustomFieldValues)
         {
@@ -34,37 +34,55 @@
                 <p class="mr-3" style="cursor: pointer;text-decoration: underline;" onclick="">#@tag.Name</p>
             }
         </div>
+        <div class="d-flex flex-row">
+            <div class="pb-2" style="padding-right:10px;">
+                <button class="btn btn-danger"><i class="bi bi-heart"></i> like</button>
+            </div>
+            <div>
+                <button class="btn btn-primary" onclick="toggleCommentView()">Comments   <i class="bi bi-arrow-down"></i> </button>
+
+            </div>
+        </div>
     </div>
-    <hr class="mt-0"/>
-    <div class="d-flex justify-content-center">
-        <div class="d-flex align-item-left flex-column" style="width:500px">
+    <div id="commentSection" class="d-none justify-content-center">
+        <div class="d-flex align-items-left flex-column" style="width:500px;">
             <div class="d-flex flex-column scrollable-container">
             </div>
-            <textarea id="commentBox" class="form-control mb-2" rows="1" placeholder="Type comment here"></textarea>
-            <button class="btn btn-secondary" onclick="sendComment()">Add-Comment</button>
+            <div class="d-flex flex-row">
+                <textarea id="commentBox" class="form-control mb-2" rows="1" placeholder="Type comment here"></textarea>
+                <button class="btn btn-primary" style="height:fit-content;" onclick="sendComment()"><i class="bi bi-send"></i></button>
+            </div>
+
         </div>
     </div>
 
-</body>
-</html>
-<script>
-    var itemId = '@Model.Item.Id';
-    if (itemId) {
-        var connection = new signalR.HubConnectionBuilder().withUrl("/Home/Index").build();
+    <script>
+
+        /*function toggleCommentView(){
+            var element=document.getElementById('commentSection')
+            if (element.classList.contains('d-none')) {
+                element.classList.remove('d-none')
+                element.classList.add('d-flex')
+            }
+            else{
+                element.classList.remove('d-flex')
+                element.classList.add('d-none')
+            }
+        }*/
+
+        var itemId = '@Model.Item.Id';
+        var connection = new signalR.HubConnectionBuilder().withUrl(`/commentHub`).build();
+
         connection.start().then(function () {
             console.log("Connected to SignalR hub");
         }).catch(function (err) {
             console.error("SignalR connection error: ", err.toString());
         });
-    } else {
-        console.error("Item ID is missing or invalid.");
-    }
 
-
-
-    function sendComment(){
-        var comment = document.getElementById('commentBox').value;
-        console.log(comment);
-    }
-
-</script>
+        function sendComment() {
+            var comment = document.getElementById('commentBox').value;
+            console.log(comment);
+        }
+    </script>
+</body>
+</html>

@@ -10,7 +10,7 @@
             .horizontal-scrollable .scroll-item {
                 display: inline-block;
                 width: 150px;
-                height: 150px;
+                height: 200px;
                 margin-right: 10px;
             }
 
@@ -25,20 +25,20 @@
     </style>
 </head>
 <body>
-    <div class="mt-4">
+    <div class="">
         <h5>Top 5 Largest</h5>
         <hr />
         <div id="largest" class=" container-fluid horizontal-scrollable">
         </div>
     </div>
-    <div class="mt-4">
+    <div class="mt-3">
         <h5>Recently added collections</h5>
         <hr />
         <div id="recent" class="container-fluid horizontal-scrollable">
         </div>
 
     </div>
-    <div class="mt-5">
+    <div class="mt-4">
         <h5 class="mb-2">Tag Cloud</h5>
         <div class="d-flex flex-row" style="gap: 1rem;">
             @foreach (var tag in Model.hashTags)

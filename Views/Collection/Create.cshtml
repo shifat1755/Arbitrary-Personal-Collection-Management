@@ -4,6 +4,7 @@
 @{
     var actionName = Model.isEdit ? "Edit" : "Create";
 }
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css">
 <form asp-action="@actionName" method="post" id="@Model.Id">
     <div class="mt-3">
         <label class="form-label">Title</label>
@@ -18,12 +19,8 @@
         <textarea class="form-control" asp-for="Description" rows="4"></textarea>
     </div>
     <input type="hidden" asp-for="UserId"/>
-    <div id="customFieldsContainer" class="mt-3">
-    </div>
-
     <div class="mt-3 d-flex align-items-center">
         <select id="fieldTypeSelector" class="form-control">
-            <option value="">Select field type</option>
             <option value="int">Int</option>
             <option value="string">String</option>
             <option value="multiline">Multiline</option>
@@ -31,6 +28,8 @@
             <option value="date">Date</option>
         </select>
         <button id="addFieldButton" type="button" class="btn btn-secondary" style="margin-left: 5px;" onclick="addNewField()">Add</button>
+    </div>
+    <div id="customFieldsContainer" class="mt-3">
     </div>
 
     <div class="mt-3 d-flex justify-content-center">
@@ -47,7 +46,7 @@
         } else {
             const id = Math.floor(Math.random() * 1000000000).toString();
             var htmlField = createField(id, type, "");
-            document.getElementById("customFieldsContainer").insertAdjacentHTML("beforeend", htmlField);
+            document.getElementById("customFieldsContainer").insertAdjacentHTML("afterbegin", htmlField);
         }
     }
 
@@ -82,48 +81,3 @@
         renderExistingCustomFields();
     }
 </script>
-
-
-@*  function createField(fieldId, fieldType, fieldName, fieldValue) {
-        let fieldHtml = `<div id="${fieldId}" class="mt-3">
-    `;
-    fieldHtml += `<label class="form-label">Custom ${fieldType} field</label>`;
-    fieldHtml += `<input type="hidden" name="CustomFields.Index" value="${fieldId}" />`;
-    fieldHtml += `<input type="hidden" name="CustomFields[${fieldId}].Type" value="${fieldType}" />`;
-
-    if (fieldType == "bool") {
-    fieldHtml += `<div class="d-flex align-items-center">
-        `;
-        }
-
-        fieldHtml += `<input type="text" class="form-control mb-1" name="CustomFields[${fieldId}].Name" placeholder="Field name" value="${fieldName}" />`;
-
-        switch (fieldType) {
-        case "int":
-        fieldValue = fieldValue === "" ? "" : parseInt(fieldValue, 10);
-        fieldHtml += `<input type="number" class="form-control" name="CustomFields[${fieldId}].Value" placeholder="Int value" value="${fieldValue}" />`;
-        break;
-        case "string":
-        fieldHtml += `<input type="text" class="form-control" name="CustomFields[${fieldId}].Value" placeholder="String value" value="${fieldValue}" />`;
-        break;
-        case "multiline":
-        fieldHtml += `<textarea class="form-control" name="CustomFields[${fieldId}].Value" rows="2" placeholder="Multiline text here">${fieldValue}</textarea>`;
-        break;
-        case "bool":
-        const checked = fieldValue === "true" ? "checked" : "";
-        fieldHtml += `<input type="hidden" name="CustomFields[${fieldId}].Value" value="false">`;
-        fieldHtml += `<input type="checkbox" class="form-check-input" style="transform: scale(1.8); margin-left: 12px; margin-bottom:6px" name="CustomFields[${fieldId}].Value" value="true" ${checked} />`;
-        fieldHtml += `
-    </div>`;
-    break;
-    case "date":
-    fieldHtml += `<input type="date" class="form-control" name="CustomFields[${fieldId}].Value" value="${fieldValue}" />`;
-    break;
-    }
-
-    fieldHtml += `<button type="button" class="btn btn-danger mt-1" onclick="removeField('${fieldId}')">Remove</button>`;
-    fieldHtml += `
-</div>`;
-
-        return fieldHtml;
-    } *@

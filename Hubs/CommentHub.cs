@@ -3,15 +3,25 @@ using Microsoft.AspNetCore.SignalR;
 
 namespace APCM.Hubs
 {
-    public class CommentHub:Hub
+    public class CommentHub : Hub
     {
-        private readonly ICommentService _commentService;
-
-        public CommentHub(ICommentService commentService) {
-            _commentService= commentService;
+        public CommentHub(ICommentService commentService)
+        {
+            _commentService = commentService;
+        }
+        public async Task SendComment(string userId,string firstName, string message)
+        {
+            // Broadcast the comment to all connected clients
+            string connectionId = Context.ConnectionId;
+            string itemId = Context.GetHttpContext().Request.Query["id"];
+            await Clients.All.SendAsync("ReceiveComment", firstName, message);
         }
 
-        public override async Task OnConnectedAsync()
+        private readonly ICommentService _commentService;
+
+
+
+/*        public override async Task OnConnectedAsync()
         {
             string connectionId = Context.ConnectionId;
             string itemId = Context.GetHttpContext().Request.Query["id"];
@@ -32,12 +42,7 @@ namespace APCM.Hubs
                 await Groups.RemoveFromGroupAsync(connectionId, itemId);
             }
             await base.OnDisconnectedAsync(exception);
-        }
-
-        public async Task sendComment(string user, string comment)
-        {
-            await Clients.All.SendAsync("ReceiveMassage",user, comment);
-        }
+        }*/
 
     }
 }

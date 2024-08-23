@@ -18,7 +18,7 @@
             .horizontal-scrollable .scroll-item {
                 display: inline-block;
                 width: 150px;
-                height: 250px;
+                height: 200px;
                 margin-right: 10px;
             }
 
@@ -68,9 +68,20 @@
         var htmlField = `
                         <div class="scroll-item" id="${item.id}" style="cursor: pointer; overflow: hidden; text-overflow: ellipsis;" onclick="window.location.href='/Item?id=${item.id}'">
                         <div>
-                            <p class="mb-0" style="font-size:14px;"><strong>${item.title}</strong></p>
-                        </div>
-                    </div>`;
+                            <p class="" style="font-size:14px;"><strong>${item.title}</strong></p>`;
+        item.customFieldValues.forEach(function (element) {
+            if (element.value == null) {
+                return;
+            }
+            val = element.value;
+            if (element.type == "bool")
+            {
+                val = element.value == "true" ? "Yes" : "No";
+            }
+            htmlField += `<p class="mb-0" style="font-size:11px;"><strong>${element.fieldName}: </strong>${val}</p>`;
+        });
+
+        htmlField += `</div></div>`
         return htmlField;
     }
 

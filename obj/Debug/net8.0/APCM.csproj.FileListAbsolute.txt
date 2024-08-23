@@ -140,3 +140,11 @@ C:\Users\Syed Shifat\source\repos\Arbitrary Collection Management\APCM\bin\Debug
 C:\Users\Syed Shifat\source\repos\Arbitrary Collection Management\APCM\bin\Debug\net8.0\Microsoft.AspNetCore.SignalR.Common.dll
 C:\Users\Syed Shifat\source\repos\Arbitrary Collection Management\APCM\bin\Debug\net8.0\Microsoft.Extensions.Features.dll
 C:\Users\Syed Shifat\source\repos\Arbitrary Collection Management\APCM\bin\Debug\net8.0\Microsoft.Extensions.Options.dll
+C:\Users\Syed Shifat\source\repos\Arbitrary Collection Management\APCM\bin\Debug\net8.0\Microsoft.AspNetCore.Http.Connections.Client.dll
+C:\Users\Syed Shifat\source\repos\Arbitrary Collection Management\APCM\bin\Debug\net8.0\Microsoft.AspNetCore.Http.Connections.Common.dll
+C:\Users\Syed Shifat\source\repos\Arbitrary Collection Management\APCM\bin\Debug\net8.0\Microsoft.AspNetCore.SignalR.Client.dll
+C:\Users\Syed Shifat\source\repos\Arbitrary Collection Management\APCM\bin\Debug\net8.0\Microsoft.AspNetCore.SignalR.Client.Core.dll
+C:\Users\Syed Shifat\source\repos\Arbitrary Collection Management\APCM\bin\Debug\net8.0\Microsoft.AspNetCore.SignalR.Protocols.Json.dll
+C:\Users\Syed Shifat\source\repos\Arbitrary Collection Management\APCM\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Users\Syed Shifat\source\repos\Arbitrary Collection Management\APCM\bin\Debug\net8.0\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Users\Syed Shifat\source\repos\Arbitrary Collection Management\APCM\bin\Debug\net8.0\libman.json
