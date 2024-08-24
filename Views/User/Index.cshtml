@@ -53,9 +53,9 @@
                         @foreach (var collection in Model.Collections)
                         {
                             <div class="container mb-2 d-flex" style="cursor:pointer; border: 1px solid #ddd; padding: 15px; margin-bottom: 10px; border-radius: 5px;">
-                                <div class="flex-grow-1">
+                                <div class="flex-grow-1" onclick="window.location.href='/Collection/Details?id=@collection.Id'">
                                     <div class="d-flex flex-row">
-                                        <h4 class="mb-1" onclick="window.location.href='/Collection/Details?id=@collection.Id'">@collection.Title</h4>
+                                        <h4 class="mb-1" >@collection.Title</h4>
                                     </div>
                                     <p class="mb-1">@collection.Description</p>
                                     <small class="text-muted"><strong>Items:</strong> @collection.Items.Count</small>

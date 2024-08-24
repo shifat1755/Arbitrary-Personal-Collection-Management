@@ -1,0 +1,33 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<h4 class="">All Collections</h4>
+<hr/>
+<style>
+    .scroll-item {
+        overflow-x: auto;
+        white-space: nowrap;
+        width: 150px;
+        height: 200px;
+        color: black;
+        display:inline-flex;
+        padding:10px;
+        background-color: #F5F5F5;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0.2, 0.2, 0.2, 0.2);
+    }
+
+</style>
+@foreach (var item in (List<APCM.Models.Entities.Collection>)ViewData["Collections"])
+{
+<div class="scroll-item m-2" id="${item.id}" style="cursor: pointer; overflow: hidden; text-overflow: ellipsis; " onclick="window.location.href='/Collection/Details?id=@item.Id'">
+    <div>
+        <p class="mb-0" style="font-size:14px;"><strong>@item.Title</strong></p>
+        <p class="mt-0 fst-italic" style="font-size:11px;"><strong>@item.Category</strong></p>
+        <p class="mt-0 mb-2" style="font-size:12px;">Items: @item.Items.Count</p>
+        <p class="flex-wrap mt-0" style="font-size:12px;  white-space: normal;">About: @item.Description</p>
+    </div>
+</div>
+}

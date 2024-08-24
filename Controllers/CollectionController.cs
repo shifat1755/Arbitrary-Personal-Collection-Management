@@ -16,15 +16,23 @@ namespace APCM.Controllers
             _collectionService=collectionService;
             _dbContext=dbContext;
         }
-
-        public async Task<IActionResult> Details(Guid id)
+        public async Task<IActionResult> Index()
         {
+            var data = (await _collectionService.GetAllCollection()).Data;
+            ViewBag.Collections = data;
+            return View();
+        }
+
+
+        public async Task<IActionResult> Details(string id)
+        {
+            var Gid=Guid.Parse(id);
             var data = new CollectionDetailsViewModel()
             {
-                Collection = (await _collectionService.GetCollection(id)).Data,
+                Collection = (await _collectionService.GetCollection(Gid)).Data,
             };
             data.Items=await _dbContext.Items
-                .Where(x => x.CollectionId == id)
+                .Where(x => x.CollectionId ==Gid )
                 .Include(c=>c.CustomFieldValues)
 
                 .ToListAsync();

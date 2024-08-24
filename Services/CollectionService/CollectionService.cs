@@ -161,5 +161,24 @@ namespace APCM.Services.CollectionService
             response.isSuccessful = true;
             return response;
         }
+        public async Task<Response<List<Collection>>> GetAllCollection()
+        {
+            var response=new Response<List<Collection>>();
+            try
+            {
+                var data = await _dbContext.Collections
+                    .Include(c => c.Items)
+                    .ToListAsync();
+                response.isSuccessful = true;
+                response.Data = data;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"{ex.Message}");
+                response.isSuccessful = false;
+            }
+            return response;
+        }
+
     }
 }

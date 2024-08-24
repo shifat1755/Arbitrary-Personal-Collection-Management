@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css">
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -19,25 +20,44 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        @if (!User.Identity.IsAuthenticated)
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Login">Login</a>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Collection" asp-action="Index"><i class="bi bi-collection"></i> Collections</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="SignUp">SignUp</a>
-                            </li>
-                        }
 
-                        @if (User.Identity.IsAuthenticated)
+                        @if (!User.Identity.IsAuthenticated)
                         {
                             <ul class="navbar-nav ms-auto">
                                 <li class="nav-item">
-                                    <span class="nav-link" style="cursor:pointer" onclick="window.location.href='/User?id=@User.FindFirst("Id").Value.ToString()'">@User.FindFirst("firstName").Value</span>
-
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Login">Login</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Logout">LogOut</a>
+                                    <span class="nav-link">|</span>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="SignUp">SignUp</a>
+                                </li>
+                            </ul>
+                        }
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <ul class="navbar-nav ms-auto">
+                                @if (User.Identity.IsAuthenticated && (User.IsInRole("Admin")))
+                                {
+                                    <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="User" asp-action="AdminPanel">Admin-Panel</a></li>
+                                    <li class="nav-item">
+                                        <span class="nav-link"> | </span>
+                                    </li>
+                                }
+
+
+                                <li class="nav-item">
+                                    <span class="nav-link" style="cursor:pointer" onclick="window.location.href='/User?id=@User.FindFirst("Id").Value.ToString()'"><i class="bi bi-person-fill"></i> @User.FindFirst("firstName").Value</span>
+                                </li>
+                                <li class="nav-item">
+                                    <span class="nav-link"> | </span>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-controller="User" asp-action="Logout">LogOut <i class="bi bi-box-arrow-right"></i></a>
                                 </li>
                             </ul>
                         }

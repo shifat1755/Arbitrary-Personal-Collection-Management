@@ -15,6 +15,7 @@ namespace APCM.Services.CollectionService
         public Task AddNewCustomField(CreateCollectionViewModel model, Collection collection);
         public Task<Response<object>> EditCollection(CreateCollectionViewModel model);
         public Task<Response<Collection>> GetCollection(Guid collectionId);
+        public Task<Response<List<Collection>>> GetAllCollection();
 
  }
 }
