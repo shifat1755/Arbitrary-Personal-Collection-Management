@@ -7,9 +7,8 @@ namespace APCM.Services.CollectionService
 {
     public interface ICollectionService
     {
-        public Task<Response<object>> CreateCollection(CreateCollectionViewModel data);/*
-        public Task<Response<object>> UpdateCollection(CreateCollectionViewModel data);*/
-        /*public Task<Response<object>> DeleteCollection(int id);*/
+        public Task<Response<object>> CreateCollection(CreateCollectionViewModel data);
+        public Task<Response<object>> Delete(string id);
         public Collection MapCommonFields(CreateCollectionViewModel model, Collection collection);
         public Task RemoveDeletedCustomField(CreateCollectionViewModel model, Collection collection);
         public Task UpdateExistingCustomField(CreateCollectionViewModel model, Collection collection);
@@ -17,6 +16,5 @@ namespace APCM.Services.CollectionService
         public Task<Response<object>> EditCollection(CreateCollectionViewModel model);
         public Task<Response<Collection>> GetCollection(Guid collectionId);
 
-        /*        public CustomField mapCustomFields(CustomField customField, CustomFieldViewModel model);*/
-    }
+ }
 }

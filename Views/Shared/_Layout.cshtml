@@ -33,7 +33,7 @@
                         {
                             <ul class="navbar-nav ms-auto">
                                 <li class="nav-item">
-                                    <span class="nav-link" onclick="window.location.href='/User/id?=@User.FindFirst("Id").Value.ToString()'">@User.FindFirst("firstName").Value</span>
+                                    <span class="nav-link" style="cursor:pointer" onclick="window.location.href='/User?id=@User.FindFirst("Id").Value.ToString()'">@User.FindFirst("firstName").Value</span>
 
                                 </li>
                                 <li class="nav-item">

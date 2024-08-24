@@ -150,15 +150,16 @@ namespace APCM.Services.CollectionService
             }
             return response;
         }
-/*        public async Task<Response<object>> UpdateCollection(CreateCollectionViewModel data)
+
+        public async Task<Response<object>> Delete(string id)
         {
             var response = new Response<object>();
+            Guid Gid=Guid.Parse(id);
+            var collection = await _dbContext.Collections.FirstOrDefaultAsync(i => i.Id == Gid);
+            _dbContext.Collections.Remove(collection);
+            await _dbContext.SaveChangesAsync();
+            response.isSuccessful = true;
             return response;
         }
-        public async Task<Response<object>> DeleteCollection(int id)
-        {
-            var response = new Response<object>();
-            return response;
-        }*/
     }
 }

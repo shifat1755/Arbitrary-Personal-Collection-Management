@@ -1,10 +1,15 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css">
+
 @model APCM.Models.Collection.CollectionDetailsViewModel;
 @using System.Text;
+@{
+    Guid? userId = null;
+    bool isAuth = User.Identity.IsAuthenticated;
+    if (isAuth)
+    {
+        userId = Guid.Parse(User?.FindFirst("Id")?.Value);
+    }
+}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -42,17 +47,17 @@
         <p class="mb-0"><strong>Items: </strong>@Model.Collection.Items.Count</p>
         <p class="mb-0"><strong>Description: </strong>@Model.Collection.Description</p>
         <div class="mt-2 mb-0">
-            @if (User.Identity.IsAuthenticated)
-            {
-                <button class="btn btn-info" style="width:250" onclick="window.location.href='/Collection/Edit/@Model.Collection.Id'">Edit Collection</button>
-            }
         </div>
+        @if (isAuth && (userId==Model.Collection.UserId))
+        {
+            <button class="btn btn-info" onclick=" window.location.href='/Collection/Edit?id=@Model.Collection.Id'">Edit Collection  <i class="bi bi-pencil-square"></i></button>
+        }
         <hr />
         <div id="itemContainer" class=" container-fluid horizontal-scrollable"></div>
         <div class="d-flex mt-2">
-            @if (User.Identity.IsAuthenticated)
+            @if (isAuth && (userId==Model.Collection.UserId) )
             {
-                <button class="btn btn-info" onclick="window.location.href='/Item/Add?collectionId=@Model.Collection.Id'">Add Item</button>
+                <button class="btn btn-info" onclick="window.location.href='/Item/Add?collectionId=@Model.Collection.Id'">Add <i class="bi bi-plus-square"></i></button>
             }
         </div>
     </div>

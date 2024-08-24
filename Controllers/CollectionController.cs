@@ -90,5 +90,17 @@ namespace APCM.Controllers
             return View("Create", model);
 
         }
+        public async Task<IActionResult> Delete(string id)
+        {
+            var response = await _collectionService.Delete(id);
+            string previousUrl = Request.Headers["Referer"].ToString();
+            if (!string.IsNullOrEmpty(previousUrl))
+            {
+                return Redirect(previousUrl);
+            }
+            return RedirectToAction("Index");
+        }
+
+
     }
 }

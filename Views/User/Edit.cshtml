@@ -1,0 +1,40 @@
+﻿@model APCM.Models.User.EditUserViewModel;
+
+<form method="post" asp-action="Edit">
+    <input type="hidden" asp-for="Id" value="@Model.Id"/>
+    <div class="mb-3">
+        <label>First Name</label>
+        <input type="text" class="form-control" asp-for="FirstName" />
+    </div>
+    <div class="mb-3">
+        <label>Last Name</label>
+        <input type="text" class="form-control" asp-for="LastName" />
+    </div  class="mb-3">
+    <div class="mb-3">
+        <label>Role</label>
+        @{if (Model.Role == "User")
+            {
+                <input type="text" class="form-control" asp-for="Role" readonly/>
+            }
+        else
+            {
+            <select class="mb-3 form-select" asp-for="Role">
+                <option value="Admin"><p class="text-muted">Admin</p></option>
+                <option value="User">User</option>
+            </select>
+            }    
+        }
+    </div>   
+    <div  class="mb-3">
+        <label>Email</label>
+        <input type="text" class="form-control" asp-for="Email" readonly/>
+    </div>
+
+    <div  class="mb-3">
+        <label>Date of birth</label>
+        <input type="date" class="form-control" asp-for="DOB" />
+    </div>
+    <div>
+        <button type="submit" class="btn btn-primary">Update</button>
+    </div>
+</form>

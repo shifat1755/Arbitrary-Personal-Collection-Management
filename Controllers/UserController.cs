@@ -1,5 +1,6 @@
 ﻿using APCM.Models.User;
 using APCM.Services.UserService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace APCM.Controllers
@@ -16,10 +17,6 @@ namespace APCM.Controllers
         public async Task<IActionResult> Index(string id)
         {
             Guid Id= Guid.Parse(id);
-            /*            var viewData = new UserViewModel()
-                        {
-                            user = (await _userService.GetUser(Id)).Data
-                        };*/
             var user = (await _userService.GetUser(Id)).Data;
             user.Password = null;
 
@@ -101,5 +98,42 @@ namespace APCM.Controllers
 
             return RedirectToAction("Index", "Home");
         }
+
+        public async Task<IActionResult> Edit(string id)
+        {
+            Guid userId=Guid.Parse(id);
+            var userData = (await _userService.GetUser(userId)).Data;
+            var model = new EditUserViewModel()
+            {
+                Id = userData.Id,
+                ProfileImage = userData.ProfileImage,
+                FirstName = userData.FirstName,
+                LastName = userData.LastName,
+                Email = userData.Email,
+                Role = userData.Role,
+                DOB = userData.DOB,
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(EditUserViewModel model)
+        {
+            if (model.Id.ToString() != User.FindFirst("Id").Value)
+            {
+                return View(model);
+            }
+            var response = await _userService.EditUser(model);
+            return RedirectToAction("Index", "User",new { id = model.Id });
+        }
+        public async Task<IActionResult> Delete(string id)
+        {
+            var response = await _userService.DeleteUser(id);
+            return RedirectToAction("Index", "Home");
+        }
+
+
+
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Azure.Core;
+using Microsoft.AspNetCore.Mvc;
 using Org.BouncyCastle;
 using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Digests;
@@ -20,5 +21,6 @@ namespace APCM.Services.CommonService
             string hashedData=BitConverter.ToString(bytes).Replace("-","");
             return hashedData;
         }
+
     }
 }

@@ -130,5 +130,46 @@ namespace APCM.Services.UserService
             return response;
         }
 
+        public async Task<Response<object>> EditUser(EditUserViewModel model)
+        {
+            var response = new Response<object>();
+            try
+            {
+                var user= await _dbContext.Users.FindAsync(model.Id);
+                user.FirstName=model.FirstName;
+                user.LastName=model.LastName;
+                user.Role = model.Role;
+                user.DOB=model.DOB;
+                await _dbContext.SaveChangesAsync();
+                response.isSuccessful = true;
+            }
+            catch ( Exception ex)
+            {
+                    Console.WriteLine(ex.Message.ToString());
+                    response.isSuccessful = false;
+
+            }
+                return response;
+        }
+
+        public async Task<Response<object>> DeleteUser(string id){
+            var response = new Response<object>();
+            try
+            {
+                Guid Gid=Guid.Parse(id);
+                var user=await _dbContext.Users.FindAsync(Gid);
+                _dbContext.Users.Remove(user);
+                await _dbContext.SaveChangesAsync();
+                await LogoutUser();
+                response.isSuccessful = true;
+            }
+            catch (Exception ex) { 
+            Console.WriteLine(ex.Message.ToString());
+                response.isSuccessful = false;
+            }
+            return response;
+        }
+
+
     }
 }
