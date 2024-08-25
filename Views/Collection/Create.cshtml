@@ -6,6 +6,7 @@
 }
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css">
 <form asp-action="@actionName" method="post" id="@Model.Id">
+    <input type="hidden" asp-for="Id" value="@Model.Id"/>
     <div class="mt-3">
         <label class="form-label">Title</label>
         <input type="text" class="form-control" asp-for="Title" />

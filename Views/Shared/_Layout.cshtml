@@ -23,6 +23,12 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Collection" asp-action="Index"><i class="bi bi-collection"></i> Collections</a>
                             </li>
+                        <li class="nav-item">
+                            <form asp-controller="Collection" asp-action="GetSearch" method="get" class="form-inline d-flex felx-row">
+                                <input type="text" name="query" class="form-control" placeholder="Search">
+                                <button type="submit" class="btn btn-primary">Search</button>
+                            </form>
+                        </li>
 
                         @if (!User.Identity.IsAuthenticated)
                         {

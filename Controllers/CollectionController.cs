@@ -4,6 +4,7 @@ using APCM.Services.CollectionService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Nest;
 
 namespace APCM.Controllers
 {
@@ -11,10 +12,12 @@ namespace APCM.Controllers
     {
         private readonly ICollectionService _collectionService;
         private readonly ApplicationDbContext _dbContext;
+        private readonly IElasticClient _elasticClient;
 
-        public CollectionController(ICollectionService collectionService, ApplicationDbContext dbContext) { 
+        public CollectionController( IElasticClient elasticClient,ICollectionService collectionService, ApplicationDbContext dbContext) { 
             _collectionService=collectionService;
             _dbContext=dbContext;
+            _elasticClient=elasticClient;
         }
         public async Task<IActionResult> Index()
         {
@@ -109,6 +112,20 @@ namespace APCM.Controllers
             return RedirectToAction("Index");
         }
 
+
+        //...............................Experimental Actions.....................................
+        [HttpGet]
+        public ActionResult GetSearch(string keyword)
+        {
+            var CollectionList = new List<DCollectionModel>();
+            if (!string.IsNullOrEmpty(keyword))
+            {
+                var result = _elasticClient.SearchAsync<DCollectionModel>(s => s.Query(q => q.QueryString(d => d.Query('*' + keyword + '*'))).Size(5000));
+                var finalContent = result.Result.Documents.ToList();
+                CollectionList = finalContent.ToList();
+            }
+            return View(CollectionList.AsEnumerable());
+        }
 
     }
 }

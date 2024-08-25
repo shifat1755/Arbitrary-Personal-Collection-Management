@@ -1,4 +1,5 @@
 using APCM.Data;
+using APCM.Extension;
 using APCM.Hubs;
 using APCM.Services.CollectionService;
 using APCM.Services.CommentService;
@@ -10,8 +11,8 @@ using APCM.Services.UserService;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
-
 // Add services to the container.
+builder.Services.AddElasticSearch(builder.Configuration);
 builder.Services.AddSignalR();
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("APCM")));

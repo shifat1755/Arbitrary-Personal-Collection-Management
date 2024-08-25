@@ -5,6 +5,7 @@ using APCM.Models.Entities;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Nest;
 using System.Security.Claims;
 
 namespace APCM.Services.CollectionService
@@ -12,10 +13,12 @@ namespace APCM.Services.CollectionService
     public class CollectionService : ICollectionService
     {
         private readonly ApplicationDbContext _dbContext;
+        private readonly IElasticClient _elasticClient;
 
-        public CollectionService(ApplicationDbContext dbContext)
+        public CollectionService(IElasticClient elasticClient, ApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
+            _elasticClient= elasticClient;
         }
         public async Task<Response<object>> CreateCollection(CreateCollectionViewModel data)
         {
@@ -36,7 +39,21 @@ namespace APCM.Services.CollectionService
                 }
                 user.Collections.Add(collection);
                 await _dbContext.SaveChangesAsync();
-                response.isSuccessful = true;
+
+
+                
+                var article = new DCollectionModel()
+                {
+                    Id = collection.Id,
+                    Title = collection.Title,
+                    Description = collection.Description,
+                    UserId = collection.UserId,
+                    Category=collection.Category,
+                };
+                await _elasticClient.IndexDocumentAsync(article);
+
+
+                    response.isSuccessful = true;
             }
             catch (Exception ex)
             {
@@ -176,6 +193,7 @@ namespace APCM.Services.CollectionService
             {
                 Console.WriteLine($"{ex.Message}");
                 response.isSuccessful = false;
+                response.Message = ex.Message;
             }
             return response;
         }
