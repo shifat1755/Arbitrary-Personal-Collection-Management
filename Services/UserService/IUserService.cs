@@ -11,6 +11,8 @@ namespace APCM.Services.UserService
         public Task<Response<object>> LoginUser(string email, string password);
         public Task<Response<object>> LogoutUser();
         public Task<Response<User>> GetUser(Guid id);
+        public Task<Response<List<User>>> GetAllUser();
+
         public Task<Response<object>> EditUser(EditUserViewModel model);
         public Task<Response<object>> DeleteUser(string id);
     }

@@ -160,11 +160,27 @@ namespace APCM.Services.UserService
                 var user=await _dbContext.Users.FindAsync(Gid);
                 _dbContext.Users.Remove(user);
                 await _dbContext.SaveChangesAsync();
-                await LogoutUser();
                 response.isSuccessful = true;
             }
             catch (Exception ex) { 
             Console.WriteLine(ex.Message.ToString());
+                response.isSuccessful = false;
+            }
+            return response;
+        }
+
+        public async Task<Response<List<User>>> GetAllUser()
+        {
+            var response = new Response<List<User>>();
+            try
+            {
+                var data = await _dbContext.Users.ToListAsync();
+                response.Data=data;
+                response.isSuccessful = true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message.ToString());
                 response.isSuccessful = false;
             }
             return response;

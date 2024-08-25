@@ -1,16 +1,21 @@
-﻿using APCM.Models.User;
+﻿using APCM.Data;
+using APCM.Models.Admin;
+using APCM.Models.User;
 using APCM.Services.UserService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace APCM.Controllers
 {
     public class UserController : Controller
     {
+        private readonly ApplicationDbContext _dbContext;
         private readonly IUserService _userService;
 
-        public UserController(IUserService userService)
+        public UserController(IUserService userService, ApplicationDbContext dbContext)
         {
+            _dbContext=dbContext;
             _userService = userService;
         }
 
@@ -129,11 +134,17 @@ namespace APCM.Controllers
         }
         public async Task<IActionResult> Delete(string id)
         {
+            string currUser =User.FindFirst("Id").Value;
             var response = await _userService.DeleteUser(id);
-            return RedirectToAction("Index", "Home");
+            if (currUser == id)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                string prevUrl = Request.Headers["Referer"].ToString();
+                return Redirect(prevUrl);
+            }
         }
-
-
-
     }
 }
