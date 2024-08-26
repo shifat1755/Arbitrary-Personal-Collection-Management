@@ -41,19 +41,30 @@ namespace APCM.Services.CollectionService
                 await _dbContext.SaveChangesAsync();
 
 
-                
-                var article = new DCollectionModel()
+
+                var elasticData = new DCollectionModel()
                 {
                     Id = collection.Id,
                     Title = collection.Title,
                     Description = collection.Description,
                     UserId = collection.UserId,
-                    Category=collection.Category,
+                    Category = collection.Category
                 };
-                await _elasticClient.IndexDocumentAsync(article);
 
-
+                var indexResponse = await _elasticClient.IndexAsync(elasticData, i => i.Index("apcm"));
+                if (!indexResponse.IsValid)
+                {
+                    Console.WriteLine($"Failed to index document: {indexResponse.OriginalException.Message}");
+                    response.isSuccessful = false;
+                    response.Message = indexResponse.OriginalException.Message;
+                }
+                else
+                {
                     response.isSuccessful = true;
+                }
+
+/*
+                    response.isSuccessful = true;*/
             }
             catch (Exception ex)
             {

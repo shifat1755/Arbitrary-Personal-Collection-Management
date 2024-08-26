@@ -4,10 +4,12 @@
 @using System.Text;
 @{
     Guid? userId = null;
+    bool? isAdmin = null;
     bool isAuth = User.Identity.IsAuthenticated;
     if (isAuth)
     {
         userId = Guid.Parse(User?.FindFirst("Id")?.Value);
+        isAdmin = User?.IsInRole("Admin");
     }
 }
 
@@ -48,16 +50,18 @@
         <p class="mb-0"><strong>Description: </strong>@Model.Collection.Description</p>
         <div class="mt-2 mb-0">
         </div>
-        @if (isAuth && (userId==Model.Collection.UserId))
+        @if (User.Identity.IsAuthenticated && ((userId == Model.Collection.UserId) || (isAdmin==true)))
         {
             <button class="btn btn-info" onclick=" window.location.href='/Collection/Edit?id=@Model.Collection.Id'">Edit Collection  <i class="bi bi-pencil-square"></i></button>
         }
         <hr />
-        <div id="itemContainer" class=" container-fluid horizontal-scrollable"></div>
-        <div class="d-flex mt-2">
-            @if (isAuth && (userId==Model.Collection.UserId) )
+        <div id="itemContainer" class=" container-fluid horizontal-scrollable" style="padding-left:0px"></div>
+        <div class="d-flex">
+            @if (User.Identity.IsAuthenticated && ((userId == Model.Collection.UserId) || (isAdmin==true)))
             {
-                <button class="btn btn-info" onclick="window.location.href='/Item/Add?collectionId=@Model.Collection.Id'">Add <i class="bi bi-plus-square"></i></button>
+                <button class="btn btn-info" onclick="window.location.href='/Item/Add?collectionId=@Model.Collection.Id'">
+                    Add <i class="bi bi-plus-square"></i>
+                </button>
             }
         </div>
     </div>
@@ -71,7 +75,7 @@
     function createField(item) { 
         console.log(item)
         var htmlField = `
-                        <div class="scroll-item" id="${item.id}" style="cursor: pointer; overflow: hidden; text-overflow: ellipsis;" onclick="window.location.href='/Item?id=${item.id}'">
+                        <div class="scroll-item mb-2" id="${item.id}" style="cursor: pointer; overflow: hidden; text-overflow: ellipsis;" onclick="window.location.href='/Item?id=${item.id}'">
                         <div>
                             <p class="" style="font-size:14px;"><strong>${item.title}</strong></p>`;
         item.customFieldValues.forEach(function (element) {

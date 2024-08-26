@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="en" >
 <head>
     <style>
         .horizontal-scrollable {
@@ -28,22 +28,22 @@
     <div class="">
         <h5>Top 5 Largest</h5>
         <hr />
-        <div id="largest" class=" container-fluid horizontal-scrollable">
+        <div id="largest" class=" container-fluid horizontal-scrollable mb-4" style="padding-left:0px">
         </div>
     </div>
-    <div class="mt-3">
+    <div class="">
         <h5>Recently added collections</h5>
         <hr />
-        <div id="recent" class="container-fluid horizontal-scrollable">
+        <div id="recent" class="container-fluid horizontal-scrollable mb-5" style="padding-left:0px">
         </div>
 
     </div>
-    <div class="mt-4">
+    <div class="">
         <h5 class="mb-2">Tag Cloud</h5>
         <div class="d-flex flex-row" style="gap: 1rem;">
             @foreach (var tag in Model.hashTags)
             {
-                <p class="mr-3" style="cursor: pointer;text-decoration: underline;" onclick="">#@tag.Name</p>
+                <p class="mr-3" style="cursor: pointer;text-decoration: underline;" onclick="window.location.href = '/Collection/Search?keyword=@tag.Name'">#@tag.Name</p>
             }
         </div>
     </div>
@@ -58,7 +58,7 @@
 
     function createField(item) {
         var htmlField = `
-                    <div class="scroll-item" id="${item.id}" style="cursor: pointer; overflow: hidden; text-overflow: ellipsis; " onclick="window.location.href='/Collection/Details/${item.id}'">
+                    <div class="scroll-item mb-2" id="${item.id}" style="cursor: pointer; overflow: hidden; text-overflow: ellipsis; " onclick="window.location.href='/Collection/Details/${item.id}'">
                     <div>
                         <p class="mb-0" style="font-size:14px;"><strong>${item.title}</strong></p>
                         <p class="mt-0 fst-italic" style="font-size:11px;"><strong>${item.category}</strong></p>

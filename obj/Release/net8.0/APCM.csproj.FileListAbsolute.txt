@@ -149,3 +149,5 @@ C:\Users\Syed Shifat\source\repos\Arbitrary Collection Management\APCM\bin\Relea
 C:\Users\Syed Shifat\source\repos\Arbitrary Collection Management\APCM\bin\Release\net8.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
 C:\Users\Syed Shifat\source\repos\Arbitrary Collection Management\APCM\bin\Release\net8.0\Microsoft.Extensions.Logging.Abstractions.dll
 C:\Users\Syed Shifat\source\repos\Arbitrary Collection Management\APCM\bin\Release\net8.0\Newtonsoft.Json.dll
+C:\Users\Syed Shifat\source\repos\Arbitrary Collection Management\APCM\bin\Release\net8.0\Elasticsearch.Net.dll
+C:\Users\Syed Shifat\source\repos\Arbitrary Collection Management\APCM\bin\Release\net8.0\Nest.dll

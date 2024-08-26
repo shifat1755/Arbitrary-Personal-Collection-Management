@@ -115,7 +115,7 @@ namespace APCM.Controllers
 
         //...............................Experimental Actions.....................................
         [HttpGet]
-        public ActionResult GetSearch(string keyword)
+        public ActionResult Search(string keyword)
         {
             var CollectionList = new List<DCollectionModel>();
             if (!string.IsNullOrEmpty(keyword))
