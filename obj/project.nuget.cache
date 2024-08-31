@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "CSvYdcMA29g=",
+  "dgSpecHash": "8unGL8tlAps=",
   "success": true,
   "projectFilePath": "C:\\Users\\Syed Shifat\\source\\repos\\Arbitrary Collection Management\\APCM\\APCM.csproj",
   "expectedPackageFiles": [
@@ -58,6 +58,7 @@
     "C:\\Users\\Syed Shifat\\.nuget\\packages\\mono.texttemplating\\2.2.1\\mono.texttemplating.2.2.1.nupkg.sha512",
     "C:\\Users\\Syed Shifat\\.nuget\\packages\\nest\\7.17.5\\nest.7.17.5.nupkg.sha512",
     "C:\\Users\\Syed Shifat\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
+    "C:\\Users\\Syed Shifat\\.nuget\\packages\\restsharp\\112.0.0\\restsharp.112.0.0.nupkg.sha512",
     "C:\\Users\\Syed Shifat\\.nuget\\packages\\system.buffers\\4.5.1\\system.buffers.4.5.1.nupkg.sha512",
     "C:\\Users\\Syed Shifat\\.nuget\\packages\\system.codedom\\4.4.0\\system.codedom.4.4.0.nupkg.sha512",
     "C:\\Users\\Syed Shifat\\.nuget\\packages\\system.collections.immutable\\6.0.0\\system.collections.immutable.6.0.0.nupkg.sha512",
