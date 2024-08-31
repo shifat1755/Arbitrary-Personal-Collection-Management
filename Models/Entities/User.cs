@@ -15,5 +15,7 @@
         public DateTime CreatedAt { get; set; }=DateTime.Now;
 
         public ICollection<Collection>Collections=new List<Collection>();
+
+        public ICollection<Ticket> Tickets=new List<Ticket>();
     }
 }

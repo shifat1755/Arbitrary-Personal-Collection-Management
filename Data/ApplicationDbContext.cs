@@ -66,6 +66,14 @@ namespace APCM.Data
                 .WithMany(i => i.Comments)
                 .HasForeignKey(cf => cf.ItemId)
                 .OnDelete(DeleteBehavior.Cascade);
+        
+            modelBuilder.Entity<Ticket>()
+                .HasKey(i=>i.Id);
+            modelBuilder.Entity<Ticket>()
+                .HasOne<User>()
+                .WithMany(i=>i.Tickets)
+                .HasForeignKey(fk=>fk.UserID)
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 
