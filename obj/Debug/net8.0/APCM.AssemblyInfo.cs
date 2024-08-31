@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("APCM")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+15a5d02557fe0b2b64bf020aa89c5bfae9c1669f")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+42f00c802f8b2dea32ba52387131865a3b89baba")]
 [assembly: System.Reflection.AssemblyProductAttribute("APCM")]
 [assembly: System.Reflection.AssemblyTitleAttribute("APCM")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
