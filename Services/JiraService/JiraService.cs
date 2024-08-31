@@ -9,9 +9,17 @@ namespace APCM.Services.JiraService
 {
     public class JiraService
     {
-        private readonly string _baseUrl = "https://shifat1755.atlassian.net/";
-        private readonly string _email = "shifat1755@gmail.com";
-        private readonly string _apiToken = "ATATT3xFfGF0pH4-ndGeoErjd7kDn0yxleacViIJ1VXuXcAzD2nBG4OOlCxdRdNj7gTymJuBeT1w-uBfdEw8i2gZTmRcDdKyXZfhbkF5_hMLITdNityTqdbV7RqTUOwRDS3V_2mSukGXMB8qzvOeVVevnDDuSGSHWp_n3Qks6t3uBsqhrIBNfvU=75C45022";
+        private readonly string _baseUrl;
+        private readonly string _email;
+        private readonly string _apiToken;
+        private readonly string _personalAccountId;
+        public JiraService(IConfiguration configuration) {
+            _apiToken = configuration["JiraSettings:ApiKey"];
+            _email = configuration["JiraSettings:Email"];
+            _baseUrl = configuration["JiraSettings:BaseUrl"];
+
+
+        }
         public async Task<Response<object>> CreateJiraTicket(CreateTicketViewModel model)
         {
             var response=new Response<object>();
@@ -33,8 +41,7 @@ namespace APCM.Services.JiraService
                         description = model.Description,
                         issuetype = new {name="Task"},
                         //priority = new { name = model.Priority },
-                        //id: 712020:38fef9eb - c394 - 4e56 - 8353 - ef4b9bb7f863
-                        reporter = new { accountId = "712020:38fef9eb-c394-4e56-8353-ef4b9bb7f863" }
+                        reporter = new { accountId = _personalAccountId }
                         //reporter=new { emailAddress = model.UserEmail }
 
                     }
