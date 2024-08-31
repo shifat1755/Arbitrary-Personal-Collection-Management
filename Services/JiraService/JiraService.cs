@@ -7,7 +7,7 @@ using System.Text;
 
 namespace APCM.Services.JiraService
 {
-    public class JiraService
+    public class JiraService:IJiraService
     {
         private readonly string _baseUrl;
         private readonly string _email;
@@ -17,7 +17,7 @@ namespace APCM.Services.JiraService
             _apiToken = configuration["JiraSettings:ApiKey"];
             _email = configuration["JiraSettings:Email"];
             _baseUrl = configuration["JiraSettings:BaseUrl"];
-
+            _personalAccountId= configuration["JiraSettings:PersonalAccountId"];
 
         }
         public async Task<Response<object>> CreateJiraTicket(CreateTicketViewModel model)

@@ -7,10 +7,10 @@ namespace APCM.Controllers
 {
     public class TicketController : Controller
     {
-        private readonly JiraService _jiraService;
+        private readonly IJiraService _jiraService;
 
-        public TicketController() {
-            _jiraService = new JiraService();
+        public TicketController(IJiraService jiraService) {
+            _jiraService = jiraService;
         }
         [HttpGet]
         public IActionResult CreateTicket()
