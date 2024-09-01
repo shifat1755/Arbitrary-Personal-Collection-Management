@@ -79,7 +79,7 @@ namespace APCM.Services.UserService
                 if (user?.Password == _commonService.DoHashing(password))
                 {
                     response.isSuccessful = true;
-                    var claims = new List<Claim> { new Claim("Id", user.Id.ToString()), new Claim(ClaimTypes.Role, user.Role), new Claim("firstName",user.FirstName), new Claim("Email", user.Email)};
+                    var claims = new List<Claim> { new Claim("Id", user.Id.ToString()), new Claim(ClaimTypes.Role, user.Role), new Claim("firstName",user.FirstName), /*new Claim("lastName", user.LastName),*/ new Claim("Email", user.Email)};
                     var claimsIdentity= new ClaimsIdentity(claims,"pwd");
                     var cp=new ClaimsPrincipal(claimsIdentity);
                     await _httpContextAccessor.HttpContext.SignInAsync(cp);

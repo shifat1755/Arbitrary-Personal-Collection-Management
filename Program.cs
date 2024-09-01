@@ -6,6 +6,7 @@ using APCM.Services.CommentService;
 using APCM.Services.CommonService;
 using APCM.Services.HomeService;
 using APCM.Services.ItemService;
+using APCM.Services.JiraService;
 using APCM.Services.Like;
 using APCM.Services.UserService;
 using Microsoft.EntityFrameworkCore;
@@ -28,6 +29,8 @@ builder.Services.AddScoped<IHomeService, HomeService>();
 builder.Services.AddScoped<IItemService, ItemService>();
 builder.Services.AddScoped<ICommentService, CommentService>();
 builder.Services.AddScoped<ILikeService, LikeService>();
+builder.Services.AddScoped<IJiraService, JiraService>();
+
 
 var app = builder.Build();
 

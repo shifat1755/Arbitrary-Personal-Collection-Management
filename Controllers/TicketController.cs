@@ -7,10 +7,10 @@ namespace APCM.Controllers
 {
     public class TicketController : Controller
     {
-        private readonly JiraService _jiraService;
+        private readonly IJiraService _jiraService;
 
-        public TicketController() {
-            _jiraService = new JiraService();
+        public TicketController(IJiraService jiraService) {
+            _jiraService = jiraService;
         }
         [HttpGet]
         public IActionResult CreateTicket()
@@ -27,8 +27,17 @@ namespace APCM.Controllers
         {
             model.UserEmail = User.FindFirst("Email").Value;
             model.UserID = Guid.Parse(User.FindFirst("Id").Value);
+
+            var response =await _jiraService.GetJiraAccountId(model.UserEmail);
+            if (response.isSuccessful == false) {
+                var response2 = await _jiraService.CreateJiraUser(model.UserEmail);
+                if (response2.isSuccessful == false) {
+                    return View(model);
+                }
+                model.jiraAccountId = (await _jiraService.GetJiraAccountId(model.UserEmail)).Message;
+            }
             model.CreateDate = DateTime.Now;
-            var response=_jiraService.CreateJiraTicket(model);
+            var response3 = _jiraService.CreateJiraTicket(model);
             return View(model);
 
         }
