@@ -1,0 +1,62 @@
+﻿@model List<APCM.Models.JiraTicket.TicketListViewModel>
+<div class="d-flex flex-column">
+<h3>Ticket History</h3>
+<table id="ticket-table" class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Summary</th>
+            <th>Status</th>
+            <th>URL</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+    <div id="pagination-controls"></div>
+</div>
+
+@section Scripts {
+    <script>
+        const tickets = @Html.Raw(Json.Serialize(Model));
+        const itemsPerPage = 5;
+        let currentPage = 1;
+
+        function renderPagination() {
+            const totalPages = Math.ceil(tickets.length / itemsPerPage);
+            let paginationControls = '';
+
+            for (let i = 1; i <= totalPages; i++) {
+                paginationControls += `<button class="btn btn-info border" onclick="goToPage(${i})">${i}</button>`;
+            }
+
+            document.getElementById('pagination-controls').innerHTML = paginationControls;
+        }
+
+        function renderData() {
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const paginatedTickets = tickets.slice(startIndex, endIndex);
+
+            let html = '';
+            paginatedTickets.forEach(ticket => {
+                html += `<tr>
+                                    <td>${ticket.summary}</td>
+                                    <td>${ticket.status}</td>
+                                    <td><a href="${ticket.link}" target="_blank">${ticket.link}</a></td>
+                                 </tr>`;
+            });
+
+            document.querySelector('#ticket-table tbody').innerHTML = html;
+        }
+
+        function goToPage(pageNumber) {
+            currentPage = pageNumber;
+            renderData();
+        }
+
+        // Initial render
+        renderData();
+        renderPagination();
+    </script>
+}

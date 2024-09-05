@@ -2,7 +2,6 @@
 {
     public class User
     {
-        
         public Guid Id { get; set; }
         public string? ProfileImage {  get; set; }
         public string FirstName { get; set; }
@@ -17,5 +16,8 @@
         public ICollection<Collection>Collections=new List<Collection>();
 
         public ICollection<Ticket> Tickets=new List<Ticket>();
+        public string? JiraAccountId { get; set; }
+        public string? SFCompanyName { get; set; }
+        public string? SFContactName { get; set; }
     }
 }

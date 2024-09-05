@@ -8,8 +8,10 @@ using APCM.Services.HomeService;
 using APCM.Services.ItemService;
 using APCM.Services.JiraService;
 using APCM.Services.Like;
+using APCM.Services.SalesForceService;
 using APCM.Services.UserService;
 using Microsoft.EntityFrameworkCore;
+using RestSharp;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
@@ -30,6 +32,8 @@ builder.Services.AddScoped<IItemService, ItemService>();
 builder.Services.AddScoped<ICommentService, CommentService>();
 builder.Services.AddScoped<ILikeService, LikeService>();
 builder.Services.AddScoped<IJiraService, JiraService>();
+builder.Services.AddScoped<IRestClient, RestClient>();
+builder.Services.AddScoped<ISalesForceService, SalesforceService>();
 
 
 var app = builder.Build();

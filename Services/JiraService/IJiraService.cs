@@ -9,6 +9,7 @@ namespace APCM.Services.JiraService
         public Task<Response<object>> GetJiraAccountId(string email);
 
         public Task<Response<object>> CreateJiraUser(string email);
+        public Task<Response<List<TicketListViewModel>>> GetIssuesReportedByUser(string jiraAccountId);
 
 
 
