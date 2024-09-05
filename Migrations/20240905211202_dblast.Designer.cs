@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace APCM.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240820183924_New1")]
-    partial class New1
+    [Migration("20240905211202_dblast")]
+    partial class dblast
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -73,6 +73,10 @@ namespace APCM.Migrations
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("firstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -207,11 +211,13 @@ namespace APCM.Migrations
                     b.Property<bool>("IsEmailVerified")
                         .HasColumnType("bit");
 
+                    b.Property<string>("JiraAccountId")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Password")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ProfileImage")
@@ -219,6 +225,12 @@ namespace APCM.Migrations
 
                     b.Property<string>("Role")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SFCompanyName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SFContactName")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -243,24 +255,20 @@ namespace APCM.Migrations
 
             modelBuilder.Entity("APCM.Models.Entities.Collection", b =>
                 {
-                    b.HasOne("APCM.Models.Entities.User", "User")
+                    b.HasOne("APCM.Models.Entities.User", null)
                         .WithMany("Collections")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("APCM.Models.Entities.Comment", b =>
                 {
-                    b.HasOne("APCM.Models.Entities.Item", "Item")
+                    b.HasOne("APCM.Models.Entities.Item", null)
                         .WithMany("Comments")
                         .HasForeignKey("ItemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Item");
                 });
 
             modelBuilder.Entity("APCM.Models.Entities.CustomField", b =>
@@ -291,13 +299,11 @@ namespace APCM.Migrations
 
             modelBuilder.Entity("APCM.Models.Entities.Like", b =>
                 {
-                    b.HasOne("APCM.Models.Entities.Item", "Item")
+                    b.HasOne("APCM.Models.Entities.Item", null)
                         .WithMany("Likes")
                         .HasForeignKey("ItemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Item");
                 });
 
             modelBuilder.Entity("ItemTag", b =>

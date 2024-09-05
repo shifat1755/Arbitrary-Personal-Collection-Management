@@ -122,8 +122,6 @@ namespace APCM.Services.JiraService
                 var request = new RestRequest("rest/api/3/search", Method.Get);
                 request.AddHeader("Authorization", $"Basic {_authToken}");
                 request.AddHeader("Content-Type", "application/json");
-
-                // Add the fields parameter to include 'self' and 'key'
                 request.AddParameter("jql", jql);
                 request.AddParameter("fields", "self,key,summary,status");
 

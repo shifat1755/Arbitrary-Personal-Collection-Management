@@ -42,7 +42,6 @@ namespace APCM.Controllers
             model.jiraAccountId = user.JiraAccountId;
             
             var prevUrl = Request.Headers["Referer"].ToString();
-
             model.PrevUrl = prevUrl;
             if (prevUrl.Contains("Details"))
             {

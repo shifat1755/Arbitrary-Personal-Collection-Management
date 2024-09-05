@@ -14,8 +14,6 @@
         public DateTime CreatedAt { get; set; }=DateTime.Now;
 
         public ICollection<Collection>Collections=new List<Collection>();
-
-        public ICollection<Ticket> Tickets=new List<Ticket>();
         public string? JiraAccountId { get; set; }
         public string? SFCompanyName { get; set; }
         public string? SFContactName { get; set; }

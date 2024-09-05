@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace APCM.Migrations
 {
     /// <inheritdoc />
-    public partial class New1 : Migration
+    public partial class dblast : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -33,9 +33,12 @@ namespace APCM.Migrations
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsEmailVerified = table.Column<bool>(type: "bit", nullable: false),
                     Role = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DOB = table.Column<DateOnly>(type: "date", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    JiraAccountId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SFCompanyName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SFContactName = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -113,6 +116,7 @@ namespace APCM.Migrations
                     Data = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ItemId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    firstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Created = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>

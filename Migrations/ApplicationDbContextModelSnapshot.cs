@@ -185,40 +185,6 @@ namespace APCM.Migrations
                     b.ToTable("hashTags");
                 });
 
-            modelBuilder.Entity("APCM.Models.Entities.Ticket", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("CollectionName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreateDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Priority")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Summary")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserEmail")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("UserID")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserID");
-
-                    b.ToTable("Ticket");
-                });
-
             modelBuilder.Entity("APCM.Models.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -337,15 +303,6 @@ namespace APCM.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("APCM.Models.Entities.Ticket", b =>
-                {
-                    b.HasOne("APCM.Models.Entities.User", null)
-                        .WithMany("Tickets")
-                        .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("ItemTag", b =>
                 {
                     b.HasOne("APCM.Models.Entities.Tag", null)
@@ -380,8 +337,6 @@ namespace APCM.Migrations
             modelBuilder.Entity("APCM.Models.Entities.User", b =>
                 {
                     b.Navigation("Collections");
-
-                    b.Navigation("Tickets");
                 });
 #pragma warning restore 612, 618
         }
