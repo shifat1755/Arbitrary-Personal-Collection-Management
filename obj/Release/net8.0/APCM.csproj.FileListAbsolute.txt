@@ -1,5 +1,4 @@
 C:\Users\Syed Shifat\source\repos\Arbitrary Collection Management\APCM\bin\Release\net8.0\appsettings.Development.json
-C:\Users\Syed Shifat\source\repos\Arbitrary Collection Management\APCM\bin\Release\net8.0\appsettings.json
 C:\Users\Syed Shifat\source\repos\Arbitrary Collection Management\APCM\bin\Release\net8.0\APCM.staticwebassets.runtime.json
 C:\Users\Syed Shifat\source\repos\Arbitrary Collection Management\APCM\bin\Release\net8.0\APCM.exe
 C:\Users\Syed Shifat\source\repos\Arbitrary Collection Management\APCM\bin\Release\net8.0\APCM.deps.json
@@ -151,3 +150,4 @@ C:\Users\Syed Shifat\source\repos\Arbitrary Collection Management\APCM\bin\Relea
 C:\Users\Syed Shifat\source\repos\Arbitrary Collection Management\APCM\bin\Release\net8.0\Newtonsoft.Json.dll
 C:\Users\Syed Shifat\source\repos\Arbitrary Collection Management\APCM\bin\Release\net8.0\Elasticsearch.Net.dll
 C:\Users\Syed Shifat\source\repos\Arbitrary Collection Management\APCM\bin\Release\net8.0\Nest.dll
+C:\Users\Syed Shifat\source\repos\Arbitrary Collection Management\APCM\bin\Release\net8.0\RestSharp.dll
