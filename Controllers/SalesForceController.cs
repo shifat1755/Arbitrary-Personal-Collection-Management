@@ -1,6 +1,7 @@
 ﻿using APCM.Data;
 using APCM.Models.SalesForce;
 using APCM.Services.SalesForceService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,6 +18,7 @@ namespace APCM.Controllers
             _salesForceService = salesForceService;
             _dbContext= dbContext;
         }
+        [Authorize(Roles = "Admin,User")]
         [HttpGet]
         public IActionResult Index()
         {
@@ -26,6 +28,7 @@ namespace APCM.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "Admin,User")]
         [HttpPost]
         public async Task<IActionResult> Index(CreateSalesForceViewModel model)
         {

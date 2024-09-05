@@ -25,7 +25,7 @@
     {
         foreach (var item in (List<APCM.Models.Entities.Collection>)ViewData["Collections"])
         {
-            <div class="scroll-item m-2" id="${item.id}" style="cursor: pointer; overflow: hidden; text-overflow: ellipsis; " onclick="window.location.href='/Collection/Details?id=@item.Id'">
+            <div class="scroll-item m-2" id="${item.id}" style="cursor: pointer; overflow: hidden; text-overflow: ellipsis; " onclick="window.location.href='/Collection/Details/@item.Id.ToString()'">
                 <div class="overflow-hidden">
                     <p class="mb-0" style="font-size:14px;"><strong>@item.Title</strong></p>
                     <p class="mt-0 fst-italic" style="font-size:11px;"><strong>@item.Category</strong></p>

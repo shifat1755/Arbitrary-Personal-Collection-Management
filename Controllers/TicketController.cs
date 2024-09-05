@@ -23,7 +23,8 @@ namespace APCM.Controllers
             var ressponse=await _jiraService.GetIssuesReportedByUser(jiraId);
             return View(ressponse.Data);
         }
-        
+
+        [Authorize(Roles = "Admin,User")]
         [HttpGet]
         public async Task<IActionResult> CreateTicket()
         {
@@ -41,8 +42,17 @@ namespace APCM.Controllers
             model.jiraAccountId = user.JiraAccountId;
             
             var prevUrl = Request.Headers["Referer"].ToString();
+
             model.PrevUrl = prevUrl;
-            
+            if (prevUrl.Contains("Details"))
+            {
+                int detailsIndex = prevUrl.IndexOf("Details");
+                string key = prevUrl.Substring(detailsIndex + "Details/".Length);
+                Guid Gkey= Guid.Parse(key);
+                var collection=await _dbContex.Collections.FindAsync(Gkey);
+                model.CollectionName = collection.Title;
+            }
+
             return View(model);
         }
 
