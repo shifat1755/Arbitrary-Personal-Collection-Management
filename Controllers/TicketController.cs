@@ -32,6 +32,7 @@ namespace APCM.Controllers
             
             model.UserID = Guid.Parse(User.FindFirst("Id").Value);
             string UserEmail = User.FindFirst("Email").Value;
+            model.UserEmail=UserEmail;
             var user = await _dbContex.Users.FindAsync(model.UserID);
             if (user.JiraAccountId == null)
             {
@@ -60,7 +61,10 @@ namespace APCM.Controllers
         public async Task<IActionResult> CreateTicket(CreateTicketViewModel model)
         {
             model.CreateDate = DateTime.Now;
-            var response3 = _jiraService.CreateJiraTicket(model);
+            var response3 = await _jiraService.CreateJiraTicket(model);
+            if ((model.jiraAccountId != null)&&(response3.isSuccessful==true)) {
+                return RedirectToAction("Index", new { jiraId = model.jiraAccountId });
+            }
             return View(model);
 
         }

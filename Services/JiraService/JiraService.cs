@@ -2,6 +2,7 @@
 using APCM.Models.JiraTicket;
 using Nest;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using RestSharp;
 using System.Text;
 
@@ -101,8 +102,12 @@ namespace APCM.Services.JiraService
 
             if (res.IsSuccessful)
             {
+                var jsonResponse = JObject.Parse(res.Content);
+
+                string accountId = jsonResponse["accountId"]?.ToString();
                 response.isSuccessful = true;
                 response.Data = res.Content;
+                response.Message = accountId;
             }
             else
             {
